@@ -1,11 +1,11 @@
 import { useContext } from "react"
-import { useHistory } from "react-router"
+// import { useHistory } from "react-router"
 import useSWR from "swr"
 
 import { Box, Main, ResponsiveContext, Spinner, Text } from "grommet"
 
 const Cart = () => {
-  const history = useHistory()
+  // const history = useHistory()
   const { data: cart, isError } = useSWR('/cart')
 
   const size = useContext(ResponsiveContext)
