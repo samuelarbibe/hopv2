@@ -26,10 +26,10 @@ const Products = () => {
   return (
     <Main
       pad='medium'
-      direction={largeSizeDevice ? 'row' : 'column'}
-      gap='medium'
       wrap
       justify='center'
+      direction={largeSizeDevice ? 'row' : 'column'}
+      alignContent={largeSizeDevice ? 'start' : 'stretch'}
     >
       {
         products
@@ -37,26 +37,30 @@ const Products = () => {
           .map((product, index) => {
             return (
               <Box
-                round='small'
-                overflow='hidden'
                 key={product._id}
                 direction='column'
                 animation={largeSizeDevice ? {
                   type: 'fadeIn',
                   delay: (index + 1) * 100
                 } : {}}
+                gap='small'
+                pad='small'
                 onClick={() => history.push(`product/${product._id}`)}
-                width={largeSizeDevice ? { max: '330px' } : {}}
+                width={largeSizeDevice ? '33%' : {}}
+                height='500px'
+                margin={{ vertical: 'small' }}
               >
                 <Box
-                  round='small'
-                  height='medium'
+                  flex
+                  round='xsmall'
                   overflow='hidden'
                   background={`url(${product.images[0]})`}
                 />
-                <Box pad='medium'>
-                  <Text weight='bold'>{product.name}</Text>
-                  <Paragraph alignSelf='end' margin='xsmall' dir='rtl'>{product.description}</Paragraph>
+                <Box height={{ min: '130px' }} justify='between' pad={largeSizeDevice ? 'xsmall' : 'medium'}>
+                  <Box>
+                    <Text weight='bold'>{product.name}</Text>
+                    <Paragraph alignSelf='end' margin='xsmall' dir='rtl'>{product.description}</Paragraph>
+                  </Box>
                   <Box direction='row' justify='between' align='center'>
                     <Text size='large' alignSelf='center'>{product.price} ₪</Text>
                     {

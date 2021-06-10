@@ -10,7 +10,7 @@ function App() {
   return (
     <Grommet theme={grommet} style={{ minHeight: '100%', paddingTop: '60px', display: 'flex', justifyContent: 'center' }}>
       <Navbar />
-      <Box width={{ max: 'xlarge' }}>
+      <Box width={{ max: 'xlarge', width: '100%' }}>
         <Switch>
           <Route path='/cart'>
             <Cart />

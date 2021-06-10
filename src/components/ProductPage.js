@@ -41,23 +41,19 @@ const ProductPage = () => {
     <Box
       pad='medium'
       gap='medium'
-      round='small'
-      width='large'
-      height='medium'
+      height='500px'
       flex={largeSizeDevice ? 'shrink' : 'grow'}
       direction={largeSizeDevice ? 'row' : 'column'}
     >
       <Box
+        flex
         round='small'
-        overflow='hidden'
-        flex='grow'
-        basis={largeSizeDevice ? '1/2' : '1'}
         background={`url(${product.images[0]})`}
       />
-      <Box>
+      <Box flex={largeSizeDevice}>
         <Box pad={largeSizeDevice ? 'small' : 'medium'}>
           <Text margin={{ bottom: 'small' }} size={largeSizeDevice ? 'large' : 'medium'} weight='bold'>{product.name}</Text>
-          <Paragraph alignSelf='end' margin='xsmall' dir='rtl'>{product.description}</Paragraph>
+          <Paragraph size={largeSizeDevice ? 'large' : 'medium'} alignSelf='end' margin='xsmall' dir='rtl'>{product.description}</Paragraph>
         </Box>
         <Box flex='grow' />
         <Box pad='medium' justify='between' align='center' direction='row'>
