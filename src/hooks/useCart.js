@@ -4,7 +4,7 @@ import useSWR from 'swr'
 const CartContext = createContext()
 
 function CartProvider({ children }) {
-  const { data: cart, isLoading, isError } = useSWR('/cart')
+  const { data: cart, isLoading, isError } = useSWR('/api/cart')
 
   const value = { cart, isLoading, isError }
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

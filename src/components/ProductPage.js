@@ -7,11 +7,11 @@ import { Box, Button, Paragraph, ResponsiveContext, Spinner, Text } from "gromme
 
 const ProductPage = () => {
   const { id } = useParams()
-  const { data: loadedProducts } = useSWR('/products', {
+  const { data: loadedProducts } = useSWR('/api/products', {
     revalidateOnMount: false,
     revalidateOnFocus: false,
   })
-  const { data: product, isError } = useSWR(`/products/${id}`, {
+  const { data: product, isError } = useSWR(`/api/products/${id}`, {
     initialData: loadedProducts?.find((product) => product._id === id),
     revalidateOnMount: true,
   })
@@ -44,7 +44,7 @@ const ProductPage = () => {
       round='small'
       width='large'
       height='medium'
-      flex={largeSizeDevice ? '' : 'grow'}
+      flex={largeSizeDevice ? 'shrink' : 'grow'}
       direction={largeSizeDevice ? 'row' : 'column'}
     >
       <Box

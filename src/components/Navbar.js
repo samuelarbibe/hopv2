@@ -11,7 +11,7 @@ const Navbar = () => {
         <Text size='xlarge' weight='bold'>HOP</Text>
       </Box>
       <Anchor
-        onClick={() => history.push('/cart')}
+        onClick={() => history.push('/api/cart')}
         icon={<Shop />}
       />
     </Header>

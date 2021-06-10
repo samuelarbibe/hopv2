@@ -6,7 +6,7 @@ import { Box, Main, ResponsiveContext, Spinner, Text } from "grommet"
 
 const Cart = () => {
   // const history = useHistory()
-  const { data: cart, isError } = useSWR('/cart')
+  const { data: cart, isError } = useSWR('/api/cart')
 
   const size = useContext(ResponsiveContext)
   const largeSizeDevice = size !== 'small'
