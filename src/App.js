@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Switch } from "react-router-dom"
+import { Box, grommet, Grommet } from "grommet"
+
+import Cart from "./components/Cart"
+import Navbar from "./components/Navbar"
+import Products from "./components/Products"
+import ProductPage from "./components/ProductPage"
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Grommet theme={grommet} style={{ minHeight: '100%', paddingTop: '60px', display: 'flex', justifyContent: 'center' }}>
+      <Navbar />
+      <Box width={{ max: 'xlarge' }}>
+        <Switch>
+          <Route path='/cart'>
+            <Cart />
+          </Route>
+          <Route path='/product/:id'>
+            <ProductPage />
+          </Route>
+          <Route path='/'>
+            <Products />
+          </Route>
+        </Switch>
+      </Box>
+    </Grommet>
+  )
 }
 
-export default App;
+export default App
