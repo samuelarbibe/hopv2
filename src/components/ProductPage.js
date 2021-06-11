@@ -1,9 +1,10 @@
 import { useContext, useState } from "react"
-import useSWR from "swr"
+import useSWR, { mutate } from "swr"
 
 import { useParams } from "react-router"
 import { Add, Subtract } from "grommet-icons"
-import { Box, Button, Paragraph, ResponsiveContext, Spinner, Text } from "grommet"
+import { Box, Button, Carousel, Image, Paragraph, ResponsiveContext, Spinner, Text } from "grommet"
+import { updateCart } from "../utils/cart"
 
 const ProductPage = () => {
   const { id } = useParams()
@@ -33,8 +34,14 @@ const ProductPage = () => {
     </Box>
   )
 
-  const handleClickAdd = () => {
-    console.log('Added to cart!')
+  const handleClickAdd = async () => {
+    try {
+      await updateCart(id, tempAmount)
+      mutate(`/api/products/${id}`)
+      setTempAmount(1)
+    } catch (err) {
+      console.log('Failed to update cart')
+    }
   }
 
   return (
@@ -48,12 +55,19 @@ const ProductPage = () => {
       <Box
         flex
         round='small'
-        background={`url(${product.images[0]})`}
-      />
+      >
+        <Carousel fill play={product.images.length > 1 ? 5000 : 0} initialChild={product.images.length - 1}>
+          {
+            product.images.map((url) => {
+              return <Image key={url} src={url} fit='cover' />
+            }).reverse()
+          }
+        </Carousel>
+      </Box>
       <Box flex={largeSizeDevice}>
         <Box pad={largeSizeDevice ? 'small' : 'medium'}>
-          <Text margin={{ bottom: 'small' }} size={largeSizeDevice ? 'large' : 'medium'} weight='bold'>{product.name}</Text>
-          <Paragraph size={largeSizeDevice ? 'large' : 'medium'} alignSelf='end' margin='xsmall' dir='rtl'>{product.description}</Paragraph>
+          <Text color='dark-1' margin={{ bottom: 'small' }} size={largeSizeDevice ? 'large' : 'medium'} weight='bold'>{product.name}</Text>
+          <Paragraph color='dark-2' size={largeSizeDevice ? 'large' : 'medium'} alignSelf='end' margin='xsmall' dir='rtl'>{product.description}</Paragraph>
         </Box>
         <Box flex='grow' />
         <Box pad='medium' justify='between' align='center' direction='row'>
@@ -62,14 +76,14 @@ const ProductPage = () => {
               ? (
                 <Box direction='row'>
                   <Button disabled={tempAmount === product.tempStock} secondary fill={false} icon={<Add />} onClick={() => setTempAmount(tempAmount + 1)} />
-                  <Text alignSelf='center' size='large' margin={{ horizontal: 'small' }}>{tempAmount}</Text>
+                  <Text color='dark-1' alignSelf='center' size='large' margin={{ horizontal: 'small' }}>{tempAmount}</Text>
                   <Button disabled={tempAmount === 0} secondary fill={false} icon={<Subtract />} onClick={() => setTempAmount(tempAmount - 1)} />
                 </Box>
               )
               : <Text color='red'>אין במלאי</Text>
           }
           <Box direction='row'>
-            <Text alignSelf='center' weight='bold' size='large'>
+            <Text color='dark-1' alignSelf='center' weight='bold' size='large'>
               {tempAmount * product.price}
             </Text>
             <Text alignSelf='center' weight='bold' size='xlarge' margin={{ horizontal: 'xxsmall' }}>
@@ -92,7 +106,7 @@ const ProductPage = () => {
           />
         </Box>
       </Box>
-    </Box>
+    </Box >
   )
 }
 

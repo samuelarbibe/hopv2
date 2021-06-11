@@ -58,8 +58,8 @@ const Products = () => {
                 />
                 <Box height={{ min: '130px' }} justify='between' pad={largeSizeDevice ? 'xsmall' : 'medium'}>
                   <Box>
-                    <Text weight='bold'>{product.name}</Text>
-                    <Paragraph alignSelf='end' margin='xsmall' dir='rtl'>{product.description}</Paragraph>
+                    <Text color='dark-1' weight='bold'>{product.name}</Text>
+                    <Paragraph color='dark-2' alignSelf='end' margin='xsmall' dir='rtl'>{product.description}</Paragraph>
                   </Box>
                   <Box direction='row' justify='between' align='center'>
                     <Text size='large' alignSelf='center'>{product.price} ₪</Text>
