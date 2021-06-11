@@ -65,7 +65,7 @@ const Cart = () => {
       primary: true,
       render: ({ images }) => {
         return (
-          <Image src={images[0]} fit='cover' height={largeSizeDevice ? '30px' : '80px'} />
+          <Image src={images[0]} fit='cover' height='80px' />
         )
       }
     },
