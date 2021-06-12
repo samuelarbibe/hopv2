@@ -1,79 +1,50 @@
-import { useContext } from "react"
-import { useHistory } from "react-router"
 import useSWR from "swr"
+import { useHistory } from "react-router"
 
-import { Box, Main, Paragraph, ResponsiveContext, Spinner, Text } from "grommet"
+import {
+  Alert, AlertIcon, AlertTitle, Image, Box,
+  Center, Flex, Heading, SimpleGrid, Text, Spinner
+} from "@chakra-ui/react"
 
 const Products = () => {
   const history = useHistory()
   const { data: products, isError } = useSWR('/api/products')
 
-  const size = useContext(ResponsiveContext)
-  const largeSizeDevice = size !== 'small'
-
   if (isError) return (
-    <Box height='large' align='center'>
-      <Text>Could not load products</Text>
-    </Box>
+    <Alert status='error'>
+      <AlertIcon />
+      <AlertTitle>Could not load products</AlertTitle>
+    </Alert>
   )
 
   if (!products) return (
-    <Box style={{ position: 'absolute', top: '50%', left: '45%' }}>
-      <Spinner size='medium' />
-    </Box>
+    <Center justifySelf='center' height='100%'>
+      <Spinner size='lg' />
+    </Center>
   )
 
   return (
-    <Main
-      pad='medium'
-      wrap
-      justify='center'
-      direction={largeSizeDevice ? 'row' : 'column'}
-      alignContent={largeSizeDevice ? 'start' : 'stretch'}
-    >
+    <SimpleGrid columns={[1, 2, 3]} spacing='10'>
       {
         products
           .sort((product) => product.tempStock)
           .map((product, index) => {
             return (
-              <Box
-                key={product._id}
-                direction='column'
-                animation={largeSizeDevice ? {
-                  type: 'fadeIn',
-                  delay: (index + 1) * 100
-                } : {}}
-                gap='small'
-                pad='small'
-                onClick={() => history.push(`product/${product._id}`)}
-                width={largeSizeDevice ? '33%' : {}}
-                height='500px'
-                margin={{ vertical: 'small' }}
-              >
-                <Box
-                  flex
-                  round='xsmall'
-                  overflow='hidden'
-                  background={`url(${product.images[0]})`}
-                />
-                <Box height={{ min: '130px' }} justify='between' pad={largeSizeDevice ? 'xsmall' : 'medium'}>
-                  <Box>
-                    <Text color='dark-1' weight='bold'>{product.name}</Text>
-                    <Paragraph color='dark-2' alignSelf='end' margin='xsmall' dir='rtl'>{product.description}</Paragraph>
-                  </Box>
-                  <Box direction='row' justify='between' align='center'>
-                    <Text size='large' alignSelf='center'>{product.price} ₪</Text>
-                    {
-                      product.tempStock === 0 &&
-                      <Text color='red'>אין במלאי</Text>
-                    }
-                  </Box>
+              <Box key={index} onClick={() => history.push(`/product/${product._id}`)} >
+                <Box height='400px'>
+                  <Image height='100%' width='100%' src={product.images[0]} fit='cover' />
                 </Box>
+                <Flex height='110px' direction='column' mt='7'>
+                  <Heading color='gray.700' mb='2' size='md'>{product.name}</Heading>
+                  <Text dir='rtl' color='gray.600'>{product.description}</Text>
+                  <Box flex='1' />
+                  <Text color='gray.700' size='large' fontSize='lg'>{product.price} ₪</Text>
+                </Flex>
               </Box>
             )
           })
       }
-    </Main >
+    </SimpleGrid >
   )
 }
 

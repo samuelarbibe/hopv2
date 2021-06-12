@@ -1,10 +1,16 @@
-import { useContext, useState } from "react"
-import useSWR, { mutate } from "swr"
+import { useState, useMemo, useEffect } from 'react'
+import useSWR from "swr"
 
 import { useParams } from "react-router"
-import { Add, Subtract } from "grommet-icons"
-import { Box, Button, Carousel, Image, Paragraph, ResponsiveContext, Spinner, Text } from "grommet"
 import { updateCart } from "../utils/cart"
+
+import {
+  Spinner, Alert,
+  AlertIcon, AlertTitle, Button, ButtonGroup, IconButton,
+  Center, Flex, Heading, Text, VStack, Stack, Box, SlideFade, Spacer
+} from "@chakra-ui/react"
+import { MinusIcon, AddIcon } from '@chakra-ui/icons'
+import ProductImages from "./ProductImages"
 
 const ProductPage = () => {
   const { id } = useParams()
@@ -12,101 +18,91 @@ const ProductPage = () => {
     revalidateOnMount: false,
     revalidateOnFocus: false,
   })
-  const { data: product, isError } = useSWR(`/api/products/${id}`, {
+  const { data: product, isErrorProduct } = useSWR(`/api/products/${id}`, {
     initialData: loadedProducts?.find((product) => product._id === id),
     revalidateOnMount: true,
+    refreshInterval: 5000,
   })
+  const { data: cart, isErrorCart } = useSWR('/api/cart')
 
-  const size = useContext(ResponsiveContext)
-  const largeSizeDevice = size !== 'small'
+  const amountInCart = cart?.items.find((item) => item.productId === id)?.amount || 0
+  const [tempAmount, setTempAmount] = useState(() => amountInCart)
+  const [isLoading, setIsLoading] = useState(false)
+  const amountDiff = useMemo(() => tempAmount - amountInCart, [tempAmount, amountInCart])
 
-  const [tempAmount, setTempAmount] = useState(1)
+  useEffect(() => {
+    setTempAmount(amountInCart)
+  }, [cart, id, product, amountInCart])
 
-  if (isError) return (
-    <Box align='center'>
-      <Text>Could not load product</Text>
-    </Box>
+  if (isErrorProduct || isErrorCart) return (
+    <Alert status='error'>
+      <AlertIcon />
+      <AlertTitle>Could not load product</AlertTitle>
+    </Alert>
   )
 
-  if (!product) return (
-    <Box style={{ position: 'absolute', top: '50%', left: '45%' }}>
-      <Spinner size='medium' />
-    </Box>
+  if (!product || !cart) return (
+    <Center justifySelf='center' height='100%'>
+      <Spinner size='lg' />
+    </Center>
   )
 
-  const handleClickAdd = async () => {
-    try {
-      await updateCart(id, tempAmount)
-      mutate(`/api/products/${id}`)
-      setTempAmount(1)
-    } catch (err) {
-      console.log('Failed to update cart')
+  const handleClick = async (actionType) => {
+    switch (actionType) {
+      case 'add':
+        setTempAmount((prev) => prev + 1)
+        break
+      case 'sub':
+        setTempAmount((prev) => prev - 1)
+        break
+      case 'save':
+        setIsLoading(true)
+        await updateCart(id, amountDiff)
+        setIsLoading(false)
+        break
+      default:
+        break
     }
   }
 
   return (
-    <Box
-      pad='medium'
-      gap='medium'
-      height='500px'
-      flex={largeSizeDevice ? 'shrink' : 'grow'}
-      direction={largeSizeDevice ? 'row' : 'column'}
-    >
-      <Box
-        flex
-        round='small'
-      >
-        <Carousel fill play={product.images.length > 1 ? 5000 : 0} initialChild={product.images.length - 1}>
-          {
-            product.images.map((url) => {
-              return <Image key={url} src={url} fit='cover' />
-            }).reverse()
-          }
-        </Carousel>
+    <Stack direction={{ base: 'column', md: 'row' }} py='5' spacing='8'>
+      <Box flex={1}>
+        <ProductImages imageUrls={product.images} />
       </Box>
-      <Box flex={largeSizeDevice}>
-        <Box pad={largeSizeDevice ? 'small' : 'medium'}>
-          <Text color='dark-1' margin={{ bottom: 'small' }} size={largeSizeDevice ? 'large' : 'medium'} weight='bold'>{product.name}</Text>
-          <Paragraph color='dark-2' size={largeSizeDevice ? 'large' : 'medium'} alignSelf='end' margin='xsmall' dir='rtl'>{product.description}</Paragraph>
-        </Box>
-        <Box flex='grow' />
-        <Box pad='medium' justify='between' align='center' direction='row'>
-          {
-            product.tempStock
-              ? (
-                <Box direction='row'>
-                  <Button disabled={tempAmount === product.tempStock} secondary fill={false} icon={<Add />} onClick={() => setTempAmount(tempAmount + 1)} />
-                  <Text color='dark-1' alignSelf='center' size='large' margin={{ horizontal: 'small' }}>{tempAmount}</Text>
-                  <Button disabled={tempAmount === 0} secondary fill={false} icon={<Subtract />} onClick={() => setTempAmount(tempAmount - 1)} />
-                </Box>
-              )
-              : <Text color='red'>אין במלאי</Text>
-          }
-          <Box direction='row'>
-            <Text color='dark-1' alignSelf='center' weight='bold' size='large'>
-              {tempAmount * product.price}
-            </Text>
-            <Text alignSelf='center' weight='bold' size='xlarge' margin={{ horizontal: 'xxsmall' }}>
-              ₪
-          </Text>
-          </Box>
-        </Box>
-        <Box
-          animation={{
-            type: 'fadeIn',
-            duration: 300,
-          }}
-        >
-          <Button
-            primary
-            size='large'
-            label='הוסף לעגלה'
-            onClick={handleClickAdd}
-            disabled={tempAmount === 0 || product.tempStock === 0}
-          />
-        </Box>
-      </Box>
-    </Box >
+      <Flex direction='column' flex={1}>
+        <VStack align='stretch'>
+          <Heading color='gray.700' mb='3' size='lg'>{product.name}</Heading>
+          <Text dir='rtl' color='gray.600'>{product.description}</Text>
+          <Text color='gray.700' size='large' fontSize='lg' fontWeight='bold'>{product.price} ₪</Text>
+        </VStack>
+        <Spacer py='3' />
+        <VStack align='stretch'>
+          <Flex direction='row-reverse' justifyContent='space-between'>
+            <Text color='gray.700' dir='rtl' alignSelf='center' fontSize='xl' fontWeight='bold' >כמות: </Text>
+            <ButtonGroup color='gray.700'>
+              <IconButton disabled={isLoading || amountDiff >= product.tempStock} icon={<AddIcon />} size='lg' onClick={() => handleClick('add')} />
+              <Text width='8' textAlign='center' alignSelf='center' fontSize='xl' fontWeight='bold' >{tempAmount}</Text>
+              <IconButton disabled={isLoading || tempAmount === 0} icon={<MinusIcon />} size='lg' onClick={() => handleClick('sub')} />
+            </ButtonGroup>
+          </Flex>
+          <SlideFade in={true}>
+            <Button
+              dir='rtl'
+              isLoading={isLoading}
+              loadingText='מעדכן...'
+              disabled={(tempAmount === 0 && amountInCart === 0) || tempAmount === amountInCart}
+              colorScheme='pink'
+              size='lg'
+              isFullWidth
+              onClick={() => handleClick('save')}
+            >
+              {amountInCart ? 'עדכן עגלה' : 'הוסף לעגלה'}
+            </Button>
+          </SlideFade>
+        </VStack>
+      </Flex>
+    </Stack >
   )
 }
 

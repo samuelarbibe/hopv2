@@ -1,17 +1,16 @@
 import { Route, Switch } from "react-router-dom"
-import { Box, Grommet } from "grommet"
+import { ChakraProvider, Container } from "@chakra-ui/react"
 
 import Cart from "./components/Cart"
 import Navbar from "./components/Navbar"
 import Products from "./components/Products"
 import ProductPage from "./components/ProductPage"
-import theme from "./theme"
 
 function App() {
   return (
-    <Grommet theme={theme} style={{ minHeight: '100%', paddingTop: '60px', display: 'flex', justifyContent: 'center' }}>
+    <ChakraProvider>
       <Navbar />
-      <Box width={{ max: 'xlarge', width: '100%' }}>
+      <Container maxWidth='container.lg' height='100%' pt='64px'>
         <Switch>
           <Route path='/cart'>
             <Cart />
@@ -23,8 +22,8 @@ function App() {
             <Products />
           </Route>
         </Switch>
-      </Box>
-    </Grommet>
+      </Container>
+    </ChakraProvider>
   )
 }
 

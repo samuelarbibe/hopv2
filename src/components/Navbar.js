@@ -1,20 +1,24 @@
-import { Button, Box, Header, Text } from "grommet"
-import { Shop } from "grommet-icons"
+import { IconButton, Box, Center, Container, Flex, Text } from "@chakra-ui/react"
+import { EditIcon } from "@chakra-ui/icons"
 import { useHistory } from "react-router"
 
 const Navbar = () => {
   const history = useHistory()
 
   return (
-    <Header background='white' style={{ position: 'fixed', top: 0 }} height='60px' width='100%' pad='small' justify='between' gap='medium'>
-      <Box pad='medium' onClick={() => history.push('')}>
-        <Text size='xlarge' weight='bold'>HOP</Text>
-      </Box>
-      <Button
-        onClick={() => history.push('/cart')}
-        icon={<Shop />}
-      />
-    </Header>
+    <Center position='fixed' width="100%">
+      <Container maxWidth='container.lg' px='0'>
+        <Flex p='3' background='white' justifyContent='space-between'>
+          <Box onClick={() => history.push('')} textAlign='center'>
+            <Text fontSize='x-large' fontWeight='bold'>HOP</Text>
+          </Box>
+          <IconButton
+            onClick={() => history.push('/cart')}
+            icon={<EditIcon />}
+          />
+        </Flex>
+      </Container>
+    </Center>
   )
 }
 
