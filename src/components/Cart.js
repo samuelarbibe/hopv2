@@ -4,9 +4,10 @@ import { useHistory } from "react-router-dom"
 import {
   Spinner, Alert, AlertIcon, AlertTitle,
   Text, VStack, Center, Box, Spacer, Button,
-  SlideFade, Table, Tr, Tbody, Td, Image, Stack, HStack
+  SlideFade, Table, Tr, Tbody, Td, Image, Stack, HStack, IconButton
 } from "@chakra-ui/react"
 import { useCartTimer } from "./CartTimer"
+import { ArrowBackIcon } from "@chakra-ui/icons"
 
 const Cart = () => {
   const history = useHistory()
@@ -29,7 +30,10 @@ const Cart = () => {
 
   if (cart.items.length === 0) return (
     <Center justifySelf='center' height='100%'>
-      <Text fontSize='xl'>העגלה ריקה</Text>
+      <VStack>
+        <Text fontSize='xl'>העגלה ריקה</Text>
+        <Button dir='rtl' onClick={() => history.push('/')}>הביתה!</Button>
+      </VStack>
     </Center>
   )
 
@@ -47,11 +51,20 @@ const Cart = () => {
   }
 
   return (
-    <VStack py='5' spacing='8' justify='stretch'>
+    <VStack py='5' justify='stretch'>
+      <IconButton
+        colorScheme="pink"
+        variant="ghost"
+        mb='2'
+        alignSelf='start'
+        fontSize='25'
+        icon={<ArrowBackIcon />}
+        onClick={() => history.goBack()}
+      />
       <Text>
         שים לב: העגלה תפוג עוד {cartTimer}
       </Text>
-      <Stack direction={{ base: 'column', md: 'row' }} spacing='8'>
+      <Stack direction={{ base: 'column', md: 'row' }} spacing='8' width='100%'>
         <Box flex={1}>
           <Table variant='simple'>
             <Tbody>
@@ -103,7 +116,7 @@ const Cart = () => {
           </SlideFade>
         </VStack>
       </Stack >
-    </VStack>
+    </VStack >
   )
 }
 

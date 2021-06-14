@@ -6,7 +6,7 @@ const Navbar = () => {
   const history = useHistory()
 
   return (
-    <Center position='fixed' width="100%">
+    <Center position='fixed' width="100%" boxShadow='sm' zIndex='999'>
       <Container maxWidth='container.lg' px='0'>
         <Flex p='3' background='white' justifyContent='space-between'>
           <Box onClick={() => history.push('')} textAlign='center'>

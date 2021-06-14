@@ -1,23 +1,29 @@
-import { Box, HStack, Image } from "@chakra-ui/react"
+import { Box, Fade, HStack, Image } from "@chakra-ui/react"
 import { useState } from "react"
 
 const ProductImages = ({ imageUrls }) => {
-
   const [mainImageIndex, setMainImageIndex] = useState(0)
 
   if (!imageUrls.length) return null
 
   return (
-    <Box>
+    <Fade in>
       {
         imageUrls.map((imageUrl, index) => {
-          return <Image
-            key={index}
-            hidden={index !== mainImageIndex}
-            maxHeight='400px'
-            width='100%'
-            src={imageUrl}
-            fit='cover' />
+          return (
+            <Box
+              key={index}
+              height={{ base: '400px', md: '500px' }}
+              width='100%'
+              overflow='hidden'
+              hidden={index !== mainImageIndex}
+            >
+              <Image
+                src={imageUrl}
+                fit='cover'
+              />
+            </Box>
+          )
         })
       }
       {
@@ -26,15 +32,15 @@ const ProductImages = ({ imageUrls }) => {
           {
             imageUrls.map((imageUrl, index) => {
               return (
-                <Box key={index} onClick={() => setMainImageIndex(index)}>
-                  <Image maxHeight='150px' src={imageUrl} fit='cover' />
+                <Box key={index} maxHeight='200px' overflow='hidden' onClick={() => setMainImageIndex(index)}>
+                  <Image src={imageUrl} fit='cover' />
                 </Box>
               )
             })
           }
         </HStack>
       }
-    </Box>
+    </Fade>
   )
 }
 
