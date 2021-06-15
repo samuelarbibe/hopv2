@@ -9,7 +9,7 @@ export const useCartTimer = (onExpire) => {
   const expireDate = useMemo(() => {
     if (!cart || isError) return null
     const cartCreationDate = new Date(cart.createdAt)
-    return new Date(cartCreationDate.getTime() + 1000 * 60 * 15)
+    return new Date(cartCreationDate.getTime() + 1000 * 60 * 5)
   }, [cart, isError])
 
   const {
