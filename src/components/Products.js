@@ -1,10 +1,10 @@
-import useSWR from "swr"
-import { useHistory } from "react-router"
+import useSWR from 'swr'
+import { useHistory } from 'react-router'
 
 import {
   Alert, AlertIcon, AlertTitle, Image, Box,
   Center, Flex, Heading, SimpleGrid, Text, Spinner, Fade
-} from "@chakra-ui/react"
+} from '@chakra-ui/react'
 
 const Products = () => {
   const history = useHistory()

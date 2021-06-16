@@ -1,46 +1,50 @@
-import { Box, Fade, HStack, Image } from "@chakra-ui/react"
-import { useState } from "react"
+import { Box } from '@chakra-ui/react'
+import { Carousel } from 'react-responsive-carousel'
+import { GoPrimitiveDot } from 'react-icons/go'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import { useState } from 'react'
+
+const Indicator = ({ isSelected, onClick }) => {
+  return (
+    <Box
+      mb='4'
+      onClick={onClick}
+      display='inline-block'
+      color={isSelected ? 'gray.100' : 'gray.600'}
+    >
+      <GoPrimitiveDot />
+    </Box>
+  )
+}
 
 const ProductImages = ({ imageUrls }) => {
-  const [mainImageIndex, setMainImageIndex] = useState(0)
+  const [currIndex, setCurrIndex] = useState(0)
 
   if (!imageUrls.length) return null
 
   return (
-    <Fade in>
+    <Carousel
+      showArrows={false}
+      showStatus={false}
+      showThumbs={false}
+      selectedItem={currIndex}
+      onChange={(newIndex) => setCurrIndex(newIndex)}
+      renderIndicator={(_, isSelected, index) =>
+        <Indicator isSelected={isSelected} onClick={() => setCurrIndex(index)} />
+      }
+    >
       {
         imageUrls.map((imageUrl, index) => {
           return (
-            <Box
+            <div
               key={index}
-              height={{ base: '400px', md: '500px' }}
-              width='100%'
-              overflow='hidden'
-              hidden={index !== mainImageIndex}
             >
-              <Image
-                src={imageUrl}
-                fit='cover'
-              />
-            </Box>
+              <img src={imageUrl} alt={`product-${index}`} />
+            </div>
           )
         })
       }
-      {
-        imageUrls.length > 1 &&
-        <HStack align='stretch' justify='space-evenly' spacing='2' mt='1'>
-          {
-            imageUrls.map((imageUrl, index) => {
-              return (
-                <Box key={index} maxHeight='200px' overflow='hidden' onClick={() => setMainImageIndex(index)}>
-                  <Image src={imageUrl} fit='cover' />
-                </Box>
-              )
-            })
-          }
-        </HStack>
-      }
-    </Fade>
+    </Carousel>
   )
 }
 

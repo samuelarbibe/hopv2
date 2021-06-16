@@ -1,4 +1,4 @@
-import { deepFreeze } from "grommet/utils"
+import { deepFreeze } from 'grommet/utils'
 
 export default deepFreeze({
   global: {
@@ -6,7 +6,7 @@ export default deepFreeze({
       family: "'Roboto', sans-serif",
     },
     colors: {
-      brand: "",
+      brand: '',
     }
   },
 })

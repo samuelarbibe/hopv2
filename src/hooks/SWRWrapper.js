@@ -1,5 +1,5 @@
-import axios from "axios"
-import { SWRConfig } from "swr"
+import axios from 'axios'
+import { SWRConfig } from 'swr'
 
 const fetcher = (...args) => axios.get(...args).then(res => res.data)
 

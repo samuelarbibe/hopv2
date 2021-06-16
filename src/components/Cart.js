@@ -1,5 +1,5 @@
-import useSWR from "swr"
-import { useHistory } from "react-router-dom"
+import useSWR from 'swr'
+import { useHistory } from 'react-router-dom'
 
 import {
   Spinner, Alert, AlertIcon, AlertTitle,
@@ -7,10 +7,10 @@ import {
   SlideFade, Table, Tr, Tbody, Td, Image,
   HStack, Drawer, DrawerOverlay, DrawerCloseButton,
   DrawerContent, DrawerFooter, DrawerBody
-} from "@chakra-ui/react"
-import { useCartTimer } from "./CartTimer"
-import { useCart } from "../hooks/useCart"
-import { useMemo } from "react"
+} from '@chakra-ui/react'
+import { useCartTimer } from './CartTimer'
+import { useCart } from '../hooks/useCart'
+import { useMemo } from 'react'
 
 const Cart = () => {
   const history = useHistory()

@@ -1,11 +1,11 @@
-import { Route, Switch } from "react-router-dom"
-import { ChakraProvider, Container } from "@chakra-ui/react"
+import { Route, Switch } from 'react-router-dom'
+import { ChakraProvider, Container } from '@chakra-ui/react'
 
-import Cart from "./components/Cart"
-import Navbar from "./components/Navbar"
-import Products from "./components/Products"
-import ProductPage from "./components/ProductPage"
-import { CartProvider } from "./hooks/useCart"
+import Cart from './components/Cart'
+import Navbar from './components/Navbar'
+import Products from './components/Products'
+import ProductPage from './components/ProductPage'
+import { CartProvider } from './hooks/useCart'
 
 function App() {
   return (

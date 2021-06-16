@@ -1,17 +1,17 @@
 import { useState, useMemo, useEffect } from 'react'
-import useSWR from "swr"
+import useSWR from 'swr'
 
-import { useParams } from "react-router"
-import { updateCart } from "../utils/cart"
+import { useParams } from 'react-router'
+import { useHistory } from 'react-router-dom'
+import { updateCart } from '../utils/cart'
 
 import {
   Spinner, Alert,
   AlertIcon, AlertTitle, Button, ButtonGroup, IconButton,
   Center, Flex, Heading, Text, VStack, Stack, Box, SlideFade, Spacer
-} from "@chakra-ui/react"
+} from '@chakra-ui/react'
 import { MinusIcon, AddIcon, ArrowBackIcon } from '@chakra-ui/icons'
-import ProductImages from "./ProductImages"
-import { useHistory } from 'react-router-dom'
+import ProductImages from './ProductImages'
 
 const ProductPage = () => {
   const history = useHistory()
@@ -70,8 +70,8 @@ const ProductPage = () => {
   return (
     <VStack py='5'>
       <IconButton
-        colorScheme="pink"
-        variant="ghost"
+        colorScheme='pink'
+        variant='ghost'
         alignSelf='start'
         fontSize='25'
         icon={<ArrowBackIcon />}
