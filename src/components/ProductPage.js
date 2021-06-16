@@ -75,7 +75,7 @@ const ProductPage = () => {
         alignSelf='start'
         fontSize='25'
         icon={<ArrowBackIcon />}
-        onClick={() => history.goBack()}
+        onClick={() => history.push('')}
       />
       <Stack direction={{ base: 'column', md: 'row' }} spacing='8'>
         <Box flex={1}>

@@ -25,7 +25,9 @@ export const useCartTimer = (onExpire) => {
     restart(expireDate)
   }
 
-  const data = minutes + ':' + seconds
+  const filledMinutes = minutes < 10 ? `0${minutes}` : minutes
+  const filledSeconds = seconds < 10 ? `0${seconds}` : seconds
+  const data = `${filledMinutes}:${filledSeconds}`
 
   return { data, isError }
 }

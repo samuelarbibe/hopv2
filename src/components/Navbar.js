@@ -1,9 +1,11 @@
-import { IconButton, Box, Center, Container, Flex, Text } from "@chakra-ui/react"
-import { EditIcon } from "@chakra-ui/icons"
 import { useHistory } from "react-router"
+import { EditIcon } from "@chakra-ui/icons"
+import { IconButton, Box, Center, Container, Flex, Text } from "@chakra-ui/react"
+import { useCart } from "../hooks/useCart"
 
 const Navbar = () => {
   const history = useHistory()
+  const { onOpen } = useCart()
 
   return (
     <Center position='fixed' width="100%" boxShadow='sm' zIndex='999'>
@@ -13,7 +15,7 @@ const Navbar = () => {
             <Text fontSize='x-large' fontWeight='bold'>HOP</Text>
           </Box>
           <IconButton
-            onClick={() => history.push('/cart')}
+            onClick={onOpen}
             icon={<EditIcon />}
           />
         </Flex>
