@@ -1,8 +1,8 @@
+import React, { useState } from 'react'
 import { Box } from '@chakra-ui/react'
 import { Carousel } from 'react-responsive-carousel'
 import { GoPrimitiveDot } from 'react-icons/go'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
-import { useState } from 'react'
 
 const Indicator = ({ isSelected, onClick }) => {
   return (

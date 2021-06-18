@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
-import { useTimer } from 'react-timer-hook';
-import useSWR from 'swr';
+import { useMemo, useState } from 'react'
+import { useTimer } from 'react-timer-hook'
+import useSWR from 'swr'
 
 export const useCartTimer = (onExpire) => {
   const { data: cart, isError } = useSWR('/api/cart')
@@ -8,6 +8,7 @@ export const useCartTimer = (onExpire) => {
 
   const expireDate = useMemo(() => {
     if (!cart || isError) return null
+    setHasStarted(false)
     const cartCreationDate = new Date(cart.createdAt)
     return new Date(cartCreationDate.getTime() + 1000 * 60 * 5)
   }, [cart, isError])

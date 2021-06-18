@@ -32,7 +32,7 @@ export const updateCart = async (productId, amount) => {
   }, false)
 
   try {
-    const requestUrl = `/api/cart/${productId}?amount=${Math.abs(amount)}`
+    const requestUrl = `/api/cart/product/${productId}?amount=${Math.abs(amount)}`
     const updateCartPormise = () => amount < 0 ? axios.delete(requestUrl) : axios.put(requestUrl)
     const { data: updatedCart } = await updateCartPormise()
     mutate('/api/cart', updatedCart, false)
@@ -42,7 +42,34 @@ export const updateCart = async (productId, amount) => {
     mutate('/api/cart')
   }
 }
+
 export const useEmptyCart = async () => {
   await axios.delete('/api/cart')
   mutate('/api/cart')
+}
+
+export const setShippingMethod = async (shippingMethodId) => {
+  mutate('/api/cart', (cart) => {
+    const tempUpdatedCart = { ...cart, shippingMethod: shippingMethodId }
+    return tempUpdatedCart
+  }, false)
+
+  mutate('/api/shippingMethods', (shippingMethods) => {
+    const updatedShippingMethods = shippingMethods.map((method) => {
+      if (method._id !== shippingMethodId) return method
+      const updatedMethod = { ...method, tempStock: method.tempStock - 1 }
+      return updatedMethod
+    })
+    return updatedShippingMethods
+  }, false)
+
+  try {
+    const { data: updatedCart } = await axios.put(`/api/cart/shippingMethod/${shippingMethodId}`)
+    mutate('/api/cart', updatedCart, false)
+    mutate('/api/shippingMethods')
+  } catch (err) {
+    console.log('Error!!!')
+    mutate('/api/shippingMethods')
+    mutate('/api/cart')
+  }
 }

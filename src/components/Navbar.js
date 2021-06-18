@@ -1,3 +1,4 @@
+import React from 'react'
 import { useHistory } from 'react-router'
 import { useCart } from '../hooks/useCart'
 import { GrShop } from 'react-icons/gr'

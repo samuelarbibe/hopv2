@@ -1,4 +1,4 @@
-import { useContext, createContext, useEffect } from 'react'
+import React, { useContext, createContext, useEffect } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
 import { useLocation } from 'react-router-dom'
 
