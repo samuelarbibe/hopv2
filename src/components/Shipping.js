@@ -13,7 +13,7 @@ import { setShippingMethod } from '../utils/cart'
 
 const ShippingOptionsHeader = ({ method }) => {
   return (
-    <AccordionButton height='50px' _expanded={{ bg: '#f1f1f1' }} justifyContent='space-between'>
+    <AccordionButton height='50px' _expanded={{ bg: 'gray.100' }} justifyContent='space-between'>
       <Text color='gray.700' fontSize='lg' fontWeight='bold'>{method.name}</Text>
       <Text color='gray.700' fontSize='lg'>{method.price ? `${method.price} ₪` : 'חינם'} </Text>
     </AccordionButton>
@@ -32,7 +32,7 @@ const ShippingOptionsRadio = ({ method, methodOptions, selectedOptionId, onChang
 
             return <Radio onClick={() => { }} key={index} value={option._id}>
               {
-                `${day} משעה ${hourFrom} לשעה ${hourTo}`
+                `${day}: ${hourFrom} - ${hourTo}`
               }
             </Radio>
           })
@@ -65,14 +65,13 @@ const Shipping = ({ cart, shippingMethods }) => {
   }, [shippingMethods])
 
   const selectedShippingMethod = useMemo(() => {
-
     return shippingMethods.find((method) => method._id === cart.shippingMethod)
   }, [cart, shippingMethods])
 
   return (
     <VStack py='5' align='stretch' dir='rtl'>
       <Heading mb='2'>בחר משלוח</Heading>
-      <Accordion allowToggle>
+      <Accordion defaultIndex={uniqueShippingMethods.findIndex((method) => selectedShippingMethod?.type === method.type)}>
         {
           uniqueShippingMethods.map((method, index) => {
             return (
@@ -93,6 +92,18 @@ const Shipping = ({ cart, shippingMethods }) => {
           })
         }
       </Accordion>
+      {
+        selectedShippingMethod &&
+        <Box p='8' backgroundColor='gray.100' fontSize='20px' >
+          {
+            `ההזמנה ${selectedShippingMethod.type === 'pickup' ? 'תחכה לאיסוף' : 'תישלח לביתך'}` +
+            ` ב${new Date(selectedShippingMethod.from).toLocaleString('he-IL', { weekday: 'long' })}` +
+            ` ${new Date(selectedShippingMethod.from).toLocaleDateString('he-IL')}` +
+            ` בין השעות ${new Date(selectedShippingMethod.from).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}` +
+            ` ל- ${new Date(selectedShippingMethod.to).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })} `
+          }
+        </Box>
+      }
     </VStack >
   )
 }

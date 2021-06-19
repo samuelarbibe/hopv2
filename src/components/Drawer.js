@@ -5,7 +5,7 @@ import {
   Spinner, Alert, AlertIcon, AlertTitle,
   Text, Center, Button,
   Drawer, DrawerOverlay, DrawerCloseButton,
-  DrawerContent, DrawerFooter, DrawerBody, Spacer
+  DrawerContent, DrawerFooter, DrawerBody, Spacer, Fade,
 } from '@chakra-ui/react'
 
 import { useCartTimer } from './CartTimer'
@@ -50,11 +50,18 @@ const CheckoutDrawer = () => {
     return [
       {
         name: 'עגלה',
-        component: <Cart cart={cart} shippingMethods={shippingMethods} products={products} />
+        component: <Cart cart={cart} shippingMethods={shippingMethods} products={products} />,
+        allowed: () => true
       },
       {
         name: 'בחירת משלוח',
-        component: <Shipping cart={cart} shippingMethods={shippingMethods} />
+        component: <Shipping cart={cart} shippingMethods={shippingMethods} />,
+        allowed: () => true
+      },
+      {
+        name: 'תשלום',
+        component: () => null,
+        allowed: () => cart.shippingMethod
       },
     ]
   }, [errors, cart, shippingMethods, products])
@@ -74,7 +81,7 @@ const CheckoutDrawer = () => {
           <>
             <DrawerBody pt='50px'>
               <Alert dir='rtl' status='warning'>
-                שים לב: העגלה תפוג עוד {cartTimer}
+                שים/י לב: העגלה תפוג עוד {cartTimer}
               </Alert>
               {
                 stages[stage].component
@@ -83,15 +90,18 @@ const CheckoutDrawer = () => {
             <DrawerFooter justifyContent='stretch'>
               {
                 stage > 0 &&
-                <Button
-                  alignSelf='end'
-                  dir='rtl'
-                  colorScheme='pink'
-                  size='lg'
-                  onClick={() => setStage((prev) => prev - 1)}
-                >
-                  {`חזור ל${stages[stage - 1].name}`}
-                </Button>
+                <Fade in={true}>
+                  <Button
+                    alignSelf='end'
+                    dir='rtl'
+                    colorScheme='pink'
+                    size='lg'
+                    variant='outline'
+                    onClick={() => setStage((prev) => prev - 1)}
+                  >
+                    {`חזור ל${stages[stage - 1].name}`}
+                  </Button>
+                </Fade>
               }
               <Spacer />
               {
@@ -101,6 +111,7 @@ const CheckoutDrawer = () => {
                   dir='rtl'
                   colorScheme='pink'
                   size='lg'
+                  disabled={!stages[stage + 1].allowed()}
                   onClick={() => setStage((prev) => prev + 1)}
                 >
                   {`המשך ל${stages[stage + 1].name}`}
