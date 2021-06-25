@@ -1,5 +1,6 @@
 import React from 'react'
 import useSWR from 'swr'
+import { useHistory, useRouteMatch } from 'react-router-dom'
 
 import {
   Table, Thead, Tr, Th, Tbody,
@@ -10,6 +11,8 @@ import {
 import { EditIcon } from '@chakra-ui/icons'
 
 const ShippingMethods = () => {
+  const history = useHistory()
+  const { url } = useRouteMatch()
   const { data: shippingMethods, isError } = useSWR('/api/shippingMethods', { refreshInterval: 5000 })
 
   if (isError) return (
@@ -57,7 +60,7 @@ const ShippingMethods = () => {
                   </Td>
                   <Td>{shippingMethod.description}</Td>
                   <Td p='2' isNumeric>
-                    <IconButton size='sm' icon={<EditIcon />} />
+                    <IconButton size='sm' icon={<EditIcon />} onClick={() => history.push(`${url}/edit/shippingMethod/${shippingMethod._id}`)} />
                   </Td>
                 </Tr>
               )

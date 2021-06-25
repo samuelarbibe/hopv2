@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import Data from './Data/Data'
 import EditProduct from './Edit/EditProduct'
+import EditShippingMethod from './Edit/EditShippingMethod'
 
 const Admin = () => {
   const { path } = useRouteMatch()
@@ -15,7 +16,7 @@ const Admin = () => {
         <EditProduct />
       </Route>
       <Route path={`${path}/edit/shippingMethod/:id`}>
-        <Data />
+        <EditShippingMethod />
       </Route>
     </Switch>
   )
