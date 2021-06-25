@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { useAuth } from '../hooks/useAuth'
+import { Redirect } from 'react-router-dom'
 import {
   Box, Center, FormControl, FormLabel,
   Text, Input, Button, Alert, AlertIcon
 } from '@chakra-ui/react'
+
+import { useAuth } from '../../hooks/useAuth'
 
 const Login = () => {
   const [username, setUsername] = useState('')
@@ -11,8 +13,10 @@ const Login = () => {
 
   const { login, isLoading, isAuth, touched } = useAuth()
 
+  if (isAuth) return <Redirect to='/admin' />
+
   return (
-    <Center dir='rtl' >
+    <Center dir='rtl'>
       <Box rounded='md' p='5' w='400px'>
         <Text mb='5' fontWeight='bold' fontSize='25px'>מסך מנהל</Text>
         <FormControl id="username">
@@ -35,7 +39,7 @@ const Login = () => {
           התחבר
         </Button>
         {
-          touched && !isAuth &&
+          touched && !isAuth && !isLoading &&
           <Alert my='4' status="error" dir='rtl'>
             <AlertIcon />
             שם משתמש או סיסמה לא נכונים

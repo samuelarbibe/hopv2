@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 
 import { useCartTimer } from './CartTimer'
-import { useCart } from '../hooks/useCart'
+import { useCart } from '../../hooks/useCart'
 import Cart from './Cart'
 import Shipping from './Shipping'
 

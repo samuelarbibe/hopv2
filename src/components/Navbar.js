@@ -10,7 +10,7 @@ const Navbar = () => {
   const { onOpen } = useCart()
 
   const bindLongPress = useLongPress(() => {
-    history.push('/login')
+    history.push('/admin')
   }, { threshold: 3000 })
 
   return (

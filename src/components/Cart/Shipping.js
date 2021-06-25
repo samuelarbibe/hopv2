@@ -9,7 +9,8 @@ import {
   Box,
   Heading,
 } from '@chakra-ui/react'
-import { setShippingMethod } from '../utils/cart'
+
+import { setShippingMethod } from '../../utils/cart'
 
 const ShippingOptionsHeader = ({ method }) => {
   return (

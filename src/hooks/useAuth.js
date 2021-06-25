@@ -20,7 +20,18 @@ function AuthProvider({ children }) {
     setIsLoading(false)
   }
 
-  const value = { isAuth, login, isLoading, touched }
+  const checkIsAuth = async () => {
+    setIsLoading(true)
+    try {
+      const { data } = await axios.get('/api/users/login')
+      setIsAuth(data.authenticated)
+    } catch (error) {
+      setIsAuth(false)
+    }
+    setIsLoading(false)
+  }
+
+  const value = { isAuth, login, checkIsAuth, isLoading, touched }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 

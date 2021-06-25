@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
-import { useTimer } from 'react-timer-hook'
 import useSWR from 'swr'
+
+import { useTimer } from 'react-timer-hook'
 
 export const useCartTimer = (onExpire) => {
   const { data: cart, isError } = useSWR('/api/cart')

@@ -17,7 +17,7 @@ const Indicator = ({ isSelected, onClick }) => {
   )
 }
 
-const ProductImages = ({ imageUrls }) => {
+const ProductImages = ({ imageUrls, ...args }) => {
   const [currIndex, setCurrIndex] = useState(0)
 
   if (!imageUrls.length) return null
@@ -32,13 +32,14 @@ const ProductImages = ({ imageUrls }) => {
       renderIndicator={(_, isSelected, index) =>
         <Indicator isSelected={isSelected} onClick={() => setCurrIndex(index)} />
       }
+      emulateTouch
+      infiniteLoop
+      {...args}
     >
       {
         imageUrls.map((imageUrl, index) => {
           return (
-            <div
-              key={index}
-            >
+            <div key={index}>
               <img src={imageUrl} alt={`product-${index}`} />
             </div>
           )
