@@ -1,24 +1,40 @@
+import path from 'path'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory, useRouteMatch } from 'react-router-dom'
 
 import {
-  Heading, VStack,
+  Heading, VStack, HStack,
   Alert, AlertIcon, AlertTitle,
   Center, Spinner, Stack, FormControl, FormLabel,
   Input, FormErrorMessage, Textarea, NumberInput,
   NumberInputField, NumberInputStepper, NumberIncrementStepper,
-  NumberDecrementStepper, Button, ButtonGroup, useToast
+  NumberDecrementStepper, Button, ButtonGroup, useToast, Spacer
 } from '@chakra-ui/react'
-import { updateProduct } from '../../../utils/products'
+import { addProduct, deleteProduct, updateProduct } from '../../../utils/products'
 
 import ImagesEditor from './EditImages'
+import DeleteButton from './DeleteButton'
+
+const defaultProduct = {
+  name: '',
+  price: 0,
+  stock: 0,
+  tempStock: 0,
+  images: [],
+  description: '',
+}
 
 const EditProduct = () => {
   const toast = useToast()
+
   const { id } = useParams()
-  const [tempProduct, setTempProduct] = useState(null)
-  const { data: product, isError } = useSWR(() => id ? `/api/products/${id}` : null, { refreshInterval: 5000 })
+  const history = useHistory()
+  const { url } = useRouteMatch()
+
+  const isNew = id === 'new'
+  const [tempProduct, setTempProduct] = useState(defaultProduct)
+  const { data: product, isError } = useSWR(() => id && !isNew ? `/api/products/${id}` : null, { refreshInterval: 5000 })
 
   useEffect(async () => {
     if (product?._id !== tempProduct?._id) {
@@ -33,7 +49,7 @@ const EditProduct = () => {
     </Alert>
   )
 
-  if (!product || !tempProduct) return (
+  if (!isNew && (!product || !tempProduct)) return (
     <Center justifySelf='center' height='100%'>
       <Spinner size='lg' />
     </Center>
@@ -76,18 +92,30 @@ const EditProduct = () => {
   }
 
   const handleSave = async () => {
-    const success = await updateProduct(tempProduct)
-    if (success) {
+    const updatedId = isNew
+      ? await addProduct(tempProduct)
+      : await updateProduct(tempProduct)
+
+    const successTitle = isNew
+      ? 'המוצר נוסף בהצלחה'
+      : 'המוצר עודכן בהצלחה'
+
+    const errorTitle = isNew
+      ? 'אירעה שגיאה בהוספת המוצר'
+      : 'אירעה שגיאה בעדכון המוצר'
+
+    if (updatedId) {
       toast({
-        title: 'המוצר עודכן בהצלחה',
+        title: successTitle,
         status: 'success',
         variant: 'subtle',
         duration: 3000,
         isClosable: true,
       })
+      history.replace(path.normalize(path.join(url, `../${updatedId}`)))
     } else {
       toast({
-        title: 'אירעה שגיאה בעדכון המוצר',
+        title: errorTitle,
         status: 'error',
         variant: 'subtle',
         duration: 3000,
@@ -96,14 +124,50 @@ const EditProduct = () => {
     }
   }
 
+  const handleDelete = async () => {
+    const deletedId = await deleteProduct(tempProduct._id)
+
+    if (deletedId) {
+      toast({
+        title: 'המוצר נמחק בהצלחה',
+        status: 'success',
+        variant: 'subtle',
+        duration: 3000,
+        isClosable: true,
+      })
+      history.push(path.normalize(path.join(url, '../../..')))
+    } else {
+      toast({
+        title: 'אירעה שגיאה במחיקת המוצר',
+        status: 'error',
+        variant: 'subtle',
+        duration: 3000,
+        isClosable: true,
+      })
+    }
+  }
 
   const canSave = (
-    JSON.stringify(tempProduct) !== JSON.stringify(product)
+    isNew
+      ? JSON.stringify(tempProduct) !== JSON.stringify(defaultProduct)
+      : JSON.stringify(tempProduct) !== JSON.stringify(product)
   )
 
   return (
     <VStack pt='10' spacing='5' align='stretch' dir='rtl' pb='10'>
-      <Heading size='md' alignSelf='end' color='gray.700'>עריכת מוצר</Heading>
+      <HStack w='100%'>
+        <Heading size='md' alignSelf='end' color='gray.700'>עריכת מוצר</Heading>
+        <Spacer />
+        {
+          !isNew &&
+          <DeleteButton
+            buttonLabel='מחק מוצר'
+            title='למחוק מוצר?'
+            description='שים ❤️: לא יהיה אפשר לשחזר אותו'
+            onConfirm={handleDelete}
+          />
+        }
+      </HStack>
       <Stack direction={{ base: 'column', md: 'row-reverse' }} alignItems='stretch' spacing='8'>
         <ImagesEditor imageUrls={tempProduct.images} onChange={onImagesUpdate} />
         <VStack flex='1'>
@@ -129,7 +193,7 @@ const EditProduct = () => {
           </FormControl>
           <FormControl id="stock">
             <FormLabel htmlFor='stock'>מלאי</FormLabel>
-            <NumberInput dir='ltr' value={tempProduct.stock} min={product.stock - product.tempStock} onChange={onStockUpdate}>
+            <NumberInput dir='ltr' value={tempProduct.stock} min={isNew ? 0 : product.stock - product.tempStock} onChange={onStockUpdate}>
               <NumberInputField />
               <NumberInputStepper>
                 <NumberIncrementStepper />
@@ -138,8 +202,12 @@ const EditProduct = () => {
             </NumberInput>
           </FormControl>
           <ButtonGroup pt='5' w='100%' justifyContent='space-between'>
-            <Button disabled={!canSave} type='submit' colorScheme='pink' onClick={handleSave}>שמור שינויים</Button>
-            <Button disabled={!canSave} type='submit' onClick={() => setTempProduct(product)}>שחזר</Button>
+            <Button disabled={!canSave} type='submit' colorScheme='pink' onClick={handleSave}>
+              {
+                isNew ? 'הוסף מוצר' : 'שמור שינויים'
+              }
+            </Button>
+            <Button disabled={!canSave} type='submit' onClick={() => setTempProduct(isNew ? defaultProduct : product)}>שחזר</Button>
           </ButtonGroup>
         </VStack>
       </Stack>

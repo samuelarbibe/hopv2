@@ -4,9 +4,9 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 
 import {
   Table, Thead, Tr, Th, Tbody,
-  Td, Heading, VStack,
+  Td, Heading, VStack, HStack,
   Alert, AlertIcon, AlertTitle,
-  Center, Spinner, IconButton, Tag
+  Center, Spinner, IconButton, Tag, Button, Spacer
 } from '@chakra-ui/react'
 import { EditIcon } from '@chakra-ui/icons'
 
@@ -30,7 +30,11 @@ const Products = () => {
 
   return (
     <VStack pt='10' spacing='5' dir='rtl'>
-      <Heading size='md' alignSelf='start' color='gray.700'>מוצרים</Heading>
+      <HStack w='100%'>
+        <Heading size='md' alignSelf='start' color='gray.700'>מוצרים</Heading>
+        <Spacer />
+        <Button variant='ghost' colorScheme='green' onClick={() => history.push(`${url}/edit/product/new`)}>הוסף מוצר חדש</Button>
+      </HStack>
       <Table variant="simple">
         <Thead>
           <Tr>
@@ -65,7 +69,7 @@ const Products = () => {
           }
         </Tbody>
       </Table>
-    </VStack>
+    </VStack >
   )
 }
 
