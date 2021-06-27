@@ -49,7 +49,7 @@ const EditProduct = () => {
     </Alert>
   )
 
-  if (!isNew && (!product || !tempProduct)) return (
+  if ((!product && !isNew) || !tempProduct) return (
     <Center justifySelf='center' height='100%'>
       <Spinner size='lg' />
     </Center>

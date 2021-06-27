@@ -4,9 +4,10 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 
 import {
   Table, Thead, Tr, Th, Tbody,
-  Td, Heading, VStack,
+  Td, Heading, VStack, HStack,
   Alert, AlertIcon, AlertTitle,
-  Center, Spinner, IconButton, Tag
+  Center, Spinner, IconButton, Tag,
+  Button, Spacer,
 } from '@chakra-ui/react'
 import { EditIcon } from '@chakra-ui/icons'
 
@@ -30,7 +31,11 @@ const ShippingMethods = () => {
 
   return (
     <VStack pt='10' spacing='5' dir='rtl'>
-      <Heading size='md' alignSelf='start' color='gray.700'>משלוחים</Heading>
+      <HStack w='100%'>
+        <Heading size='md' alignSelf='start' color='gray.700'>משלוחים</Heading>
+        <Spacer />
+        <Button variant='ghost' colorScheme='green' onClick={() => history.push(`${url}/edit/shippingMethod/new`)}>הוסף משלוח חדש</Button>
+      </HStack>
       <Table variant="simple">
         <Thead>
           <Tr>

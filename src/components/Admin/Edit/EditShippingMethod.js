@@ -1,6 +1,7 @@
+import path from 'path'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom'
 
 import {
   Heading, VStack, Checkbox,
@@ -9,18 +10,36 @@ import {
   Input, FormErrorMessage, Textarea, NumberInput,
   NumberInputField, NumberInputStepper, NumberIncrementStepper,
   NumberDecrementStepper, Button, ButtonGroup, useToast, Select,
-  Stack, HStack,
+  Stack, HStack, Spacer,
 } from '@chakra-ui/react'
 
-import { updatedShippingMethod } from '../../../utils/shippingMethod'
+import { addShippingMethod, deleteShippingMethod, updateShippingMethod } from '../../../utils/shippingMethod'
 import DatePicker from '../../../libs/datepicker/DatePicker'
+import DeleteButton from './DeleteButton'
+
+const defaultShippingMethod = {
+  name: '',
+  description: '',
+  type: 'pickup',
+  stock: 0,
+  price: 0,
+  tempStock: 0,
+  freeAbove: 0,
+  from: new Date(),
+  to: new Date(),
+}
 
 const EditShippingMethod = () => {
   const toast = useToast()
+
   const { id } = useParams()
-  const [tempShippingMethod, setTempShippingMethod] = useState(null)
+  const history = useHistory()
+  const { url } = useRouteMatch()
+
+  const isNew = id === 'new'
+  const [tempShippingMethod, setTempShippingMethod] = useState(defaultShippingMethod)
   const [freeAbove, setFreeAbove] = useState(false)
-  const { data: shippingMethod, isError } = useSWR(() => id ? `/api/shippingMethods/${id}` : null, { refreshInterval: 5000 })
+  const { data: shippingMethod, isError } = useSWR(() => id && !isNew ? `/api/shippingMethods/${id}` : null, { refreshInterval: 5000 })
 
   useEffect(async () => {
     if (shippingMethod?._id !== tempShippingMethod?._id) {
@@ -36,7 +55,7 @@ const EditShippingMethod = () => {
     </Alert>
   )
 
-  if (!shippingMethod || !tempShippingMethod) return (
+  if ((!shippingMethod && !isNew) || !tempShippingMethod) return (
     <Center justifySelf='center' height='100%'>
       <Spinner size='lg' />
     </Center>
@@ -106,18 +125,53 @@ const EditShippingMethod = () => {
   }
 
   const handleSave = async () => {
-    const success = await updatedShippingMethod(tempShippingMethod)
-    if (success) {
+    const updatedId = isNew
+      ? await addShippingMethod(tempShippingMethod)
+      : await updateShippingMethod(tempShippingMethod)
+
+    const successTitle = isNew
+      ? 'המשלוח נוסף בהצלחה'
+      : 'המשלוח עודכן בהצלחה'
+
+    const errorTitle = isNew
+      ? 'אירעה שגיאה בהוספת המשלוח'
+      : 'אירעה שגיאה בעדכון המשלוח'
+
+    if (updatedId) {
       toast({
-        title: 'המשלוח עודכן בהצלחה',
+        title: successTitle,
         status: 'success',
         variant: 'subtle',
         duration: 3000,
         isClosable: true,
       })
+      history.replace(path.normalize(path.join(url, `../${updatedId}`)))
     } else {
       toast({
-        title: 'אירעה שגיאה בעדכון המשלוח',
+        title: errorTitle,
+        status: 'error',
+        variant: 'subtle',
+        duration: 3000,
+        isClosable: true,
+      })
+    }
+  }
+
+  const handleDelete = async () => {
+    const deletedId = await deleteShippingMethod(shippingMethod._id)
+
+    if (deletedId) {
+      toast({
+        title: 'המשלוח נמחק בהצלחה',
+        status: 'success',
+        variant: 'subtle',
+        duration: 3000,
+        isClosable: true,
+      })
+      history.push(path.normalize(path.join(url, '../../..')))
+    } else {
+      toast({
+        title: 'אירעה שגיאה במחיקת המשלוח',
         status: 'error',
         variant: 'subtle',
         duration: 3000,
@@ -127,7 +181,9 @@ const EditShippingMethod = () => {
   }
 
   const canSave = (
-    JSON.stringify(tempShippingMethod) !== JSON.stringify(shippingMethod)
+    isNew
+      ? JSON.stringify(tempShippingMethod) !== JSON.stringify(defaultShippingMethod)
+      : JSON.stringify(tempShippingMethod) !== JSON.stringify(shippingMethod)
   )
 
   const shippingTypes = [
@@ -143,12 +199,24 @@ const EditShippingMethod = () => {
 
   return (
     <VStack pt='10' spacing='5' align='stretch' dir='rtl' pb='10'>
-      <Heading size='md' alignSelf='end' color='gray.700'>עריכת משלוח</Heading>
+      <HStack w='100%'>
+        <Heading size='md' alignSelf='end' color='gray.700'>עריכת משלוח</Heading>
+        <Spacer />
+        {
+          !isNew &&
+          <DeleteButton
+            buttonLabel='מחק משלוח'
+            title='למחוק משלוח?'
+            description='שים ❤️: לא יהיה אפשר לשחזר אותו'
+            onConfirm={handleDelete}
+          />
+        }
+      </HStack>
       <Stack direction={{ base: 'column', md: 'row-reverse' }} alignItems='stretch' spacing='8'>
         <VStack flex='1'>
           <FormControl id="stock">
             <FormLabel htmlFor='stock'>מלאי</FormLabel>
-            <NumberInput dir='ltr' value={tempShippingMethod.stock} min={shippingMethod.stock - shippingMethod.tempStock} onChange={onStockUpdate}>
+            <NumberInput dir='ltr' value={tempShippingMethod.stock} min={isNew ? 0 : shippingMethod.stock - shippingMethod.tempStock} onChange={onStockUpdate}>
               <NumberInputField />
               <NumberInputStepper>
                 <NumberIncrementStepper />
@@ -194,7 +262,7 @@ const EditShippingMethod = () => {
             <Input type="text" id='name' value={tempShippingMethod.name} onChange={handleChange} />
             <FormErrorMessage>שם המשלוח לא יכול להיות ריק</FormErrorMessage>
           </FormControl>
-          <FormControl id="type" isInvalid={!tempShippingMethod.name.length}>
+          <FormControl id="type">
             <FormLabel htmlFor='type'>סוג</FormLabel>
             <Select id='type' value={tempShippingMethod.type} onChange={handleChange} dir='ltr'>
               {
@@ -205,7 +273,6 @@ const EditShippingMethod = () => {
                 })
               }
             </Select>
-            <FormErrorMessage>שם המשלוח לא יכול להיות ריק</FormErrorMessage>
           </FormControl>
           <FormControl id="description" isInvalid={!tempShippingMethod.description.length}>
             <FormLabel htmlFor='description'>תיאור</FormLabel>
@@ -223,7 +290,7 @@ const EditShippingMethod = () => {
             </NumberInput>
           </FormControl>
           <FormControl py='3'>
-            <Checkbox isDisabled={!tempShippingMethod.price} isChecked={freeAbove} onChange={onChangeIsFreeAbove}>חינם מעל סכום </Checkbox>
+            <Checkbox isDisabled={!tempShippingMethod.price && !freeAbove} isChecked={freeAbove} onChange={onChangeIsFreeAbove}>חינם מעל סכום </Checkbox>
           </FormControl>
           {
             freeAbove &&
@@ -240,8 +307,12 @@ const EditShippingMethod = () => {
         </VStack>
       </Stack>
       <ButtonGroup pt='5' w='100%' justifyContent='space-between'>
-        <Button disabled={!canSave} type='submit' colorScheme='pink' onClick={handleSave}>שמור שינויים</Button>
-        <Button disabled={!canSave} type='submit' onClick={() => setTempShippingMethod(shippingMethod)}>שחזר</Button>
+        <Button disabled={!canSave} type='submit' colorScheme='pink' onClick={handleSave}>
+          {
+            isNew ? 'הוסף משלוח' : 'שמור שינויים'
+          }
+        </Button>
+        <Button disabled={!canSave} type='submit' onClick={() => setTempShippingMethod(isNew ? defaultShippingMethod : shippingMethod)}>שחזר</Button>
       </ButtonGroup>
     </VStack >
   )
