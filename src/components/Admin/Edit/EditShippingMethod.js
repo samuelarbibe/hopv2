@@ -29,6 +29,17 @@ const defaultShippingMethod = {
   to: new Date(),
 }
 
+export const shippingTypes = [
+  {
+    name: 'delivery',
+    hebrewName: 'משלוח'
+  },
+  {
+    name: 'pickup',
+    hebrewName: 'איסוף עצמי'
+  },
+]
+
 const EditShippingMethod = () => {
   const toast = useToast()
 
@@ -185,17 +196,6 @@ const EditShippingMethod = () => {
       ? JSON.stringify(tempShippingMethod) !== JSON.stringify(defaultShippingMethod)
       : JSON.stringify(tempShippingMethod) !== JSON.stringify(shippingMethod)
   )
-
-  const shippingTypes = [
-    {
-      name: 'delivery',
-      hebrewName: 'משלוח'
-    },
-    {
-      name: 'pickup',
-      hebrewName: 'איסוף עצמי'
-    },
-  ]
 
   return (
     <VStack pt='10' spacing='5' align='stretch' dir='rtl' pb='10'>
