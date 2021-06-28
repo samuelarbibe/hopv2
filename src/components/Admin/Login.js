@@ -30,7 +30,7 @@ const Login = () => {
         <Button
           disabled={!username.length || !password.length}
           mt={4}
-          colorScheme="pink"
+          colorScheme="brand"
           type="submit"
           onClick={() => login(username, password)}
           isLoading={isLoading}

@@ -15,8 +15,8 @@ import { setShippingMethod } from '../../utils/cart'
 const ShippingOptionsHeader = ({ method }) => {
   return (
     <AccordionButton height='50px' _expanded={{ bg: 'gray.100' }} justifyContent='space-between'>
-      <Text color='gray.700' fontSize='lg' fontWeight='bold'>{method.name}</Text>
-      <Text color='gray.700' fontSize='lg'>{method.price ? `${method.price} ₪` : 'חינם'} </Text>
+      <Text fontSize='lg' fontWeight='bold'>{method.name}</Text>
+      <Text fontSize='lg'>{method.price ? `${method.price} ₪` : 'חינם'} </Text>
     </AccordionButton>
   )
 }

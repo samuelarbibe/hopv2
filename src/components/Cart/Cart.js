@@ -38,17 +38,17 @@ const Cart = ({ cart, products, shippingMethods }) => {
                     <Image src={item.images[0]} height={{ base: '100px', md: '150px' }} />
                   </Td>
                   <Td p='1'>
-                    <Text fontSize='md' fontWeight='bold' color='gray.700' >
+                    <Text fontSize='md' fontWeight='bold'  >
                       {item.name}
                     </Text>
                   </Td>
                   <Td p='1'>
-                    <Text width='30px' fontSize='md' fontWeight='bold' color='gray.700' >
+                    <Text width='30px' fontSize='md' fontWeight='bold'  >
                       {item.amount} X
                     </Text>
                   </Td>
                   <Td p='1' isNumeric wordBreak='unset'>
-                    <Text width='50px' fontWeight='bold' color='gray.700' >
+                    <Text width='50px' fontWeight='bold'  >
                       {item.price * item.amount} ₪
                     </Text>
                   </Td>
@@ -59,12 +59,12 @@ const Cart = ({ cart, products, shippingMethods }) => {
         </Tbody>
       </Table>
       <HStack justify='space-between'>
-        <Text fontSize='lg' fontWeight='bold' color='gray.700' >סכום ביניים</Text>
-        <Text fontSize='lg' color='gray.600' >{intermidiateSum} ₪ </Text>
+        <Text fontSize='lg' fontWeight='bold' color='gray.800'>סכום ביניים</Text>
+        <Text fontSize='lg' >{intermidiateSum} ₪ </Text>
       </HStack>
       <HStack justify='space-between'>
-        <Text fontSize='lg' fontWeight='bold' color='gray.700' >משלוח</Text>
-        <Text fontSize='lg' color='gray.600' >{selectedShippingMethod ? `${selectedShippingMethod.price} ₪` : 'לא נבחר'}</Text>
+        <Text fontSize='lg' fontWeight='bold' color='gray.800' >משלוח</Text>
+        <Text fontSize='lg'>{selectedShippingMethod ? `${selectedShippingMethod.price} ₪` : ' לא נבחר'}</Text>
       </HStack>
     </VStack>
   )

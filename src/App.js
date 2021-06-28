@@ -14,10 +14,11 @@ import Products from './components/Products'
 import ProductPage from './components/ProductPage'
 import PrivateRoute from './components/Admin/PrivateRoute'
 import CheckoutDrawer from './components/Cart/Drawer'
+import theme from './theme'
 
 function App() {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <CartProvider>
         <AuthProvider>
           <DndProvider backend={HTML5Backend}>

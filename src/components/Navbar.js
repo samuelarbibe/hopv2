@@ -35,7 +35,7 @@ const Navbar = () => {
           {
             adminMode
               ? (
-                <Menu placement='bottom-end'>
+                <Menu placement='bottom-end' >
                   {({ isOpen }) => (
                     <>
                       <MenuButton isActive={isOpen} as={IconButton} icon={isOpen ? <CloseIcon width='10px' /> : <HamburgerIcon />} variant='ghost'>
@@ -52,10 +52,10 @@ const Navbar = () => {
               )
               : (
                 < IconButton
-                  colorScheme='pink'
+                  colorScheme='brand'
                   variant='ghost'
                   onClick={onOpenCart}
-                  icon={<GrShop size='1.4em' />}
+                  icon={<GrShop size='1.4em' color='brand' />}
                 />
               )
           }

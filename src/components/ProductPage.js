@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { updateCart } from '../utils/cart'
 
 import {
-  Spinner, Alert,
+  Spinner, Alert, HStack, Tag,
   AlertIcon, AlertTitle, Button, ButtonGroup, IconButton,
   Center, Flex, Heading, Text, VStack, Stack, Box, SlideFade, Spacer
 } from '@chakra-ui/react'
@@ -66,22 +66,29 @@ const ProductPage = () => {
   }
 
   return (
-    <VStack py='5'>
+    <VStack py='5' pb='10'>
       <Stack direction={{ base: 'column', md: 'row' }} spacing='8'>
         <Box flex={1}>
           <ProductImages imageUrls={product.images} />
         </Box>
         <Flex direction='column' flex={1}>
           <VStack align='stretch'>
-            <Heading color='gray.700' mb='3' size='lg'>{product.name}</Heading>
+            <Heading mb='3' size='lg'>{product.name}</Heading>
             <Text dir='rtl' color='gray.600'>{product.description}</Text>
-            <Text color='gray.700' size='large' fontSize='lg' fontWeight='bold'>{product.price} ₪</Text>
+            <HStack w='100%'>
+              <Text size='large' fontSize='lg' fontWeight='bold'>{product.price} ₪</Text>
+              <Spacer />
+              {
+                !product.tempStock &&
+                <Tag size='sm' colorScheme='red'>אין במלאי</Tag>
+              }
+            </HStack>
           </VStack>
           <Spacer py='3' />
           <VStack align='stretch' spacing='3'>
             <Flex direction='row-reverse' justifyContent='space-between'>
-              <Text color='gray.700' dir='rtl' alignSelf='center' fontSize='xl' fontWeight='bold' >כמות: </Text>
-              <ButtonGroup color='gray.700'>
+              <Text dir='rtl' alignSelf='center' fontSize='xl' fontWeight='bold' >כמות: </Text>
+              <ButtonGroup >
                 <IconButton disabled={isLoading || amountDiff >= product.tempStock} icon={<AddIcon />} size='lg' onClick={() => handleClick('add')} />
                 <Text width='8' textAlign='center' alignSelf='center' fontSize='xl' fontWeight='bold' >{tempAmount}</Text>
                 <IconButton disabled={isLoading || tempAmount === 0} icon={<MinusIcon />} size='lg' onClick={() => handleClick('sub')} />
@@ -93,7 +100,7 @@ const ProductPage = () => {
                 isLoading={isLoading}
                 loadingText='מעדכן...'
                 disabled={(tempAmount === 0 && amountInCart === 0) || tempAmount === amountInCart}
-                colorScheme='pink'
+                colorScheme='brand'
                 size='lg'
                 isFullWidth
                 onClick={() => handleClick('save')}

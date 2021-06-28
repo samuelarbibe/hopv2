@@ -4,7 +4,8 @@ import { useHistory } from 'react-router'
 
 import {
   Alert, AlertIcon, AlertTitle, Image, Box,
-  Center, Flex, Heading, SimpleGrid, Text, Spinner, Fade
+  Center, Flex, Heading, SimpleGrid, Text, Spinner, Fade,
+  Spacer, HStack, Tag,
 } from '@chakra-ui/react'
 
 const Products = () => {
@@ -25,7 +26,7 @@ const Products = () => {
   )
 
   return (
-    <SimpleGrid columns={[1, 2, 3]} spacing='10' py='5'>
+    <SimpleGrid columns={[1, 2, 3]} spacing='10' py='5' pb='10'>
       {
         products
           .sort((product) => product.tempStock)
@@ -37,10 +38,17 @@ const Products = () => {
                     <Image height='100%' width='100%' src={product.images[0]} fit='cover' />
                   </Box>
                   <Flex height='110px' direction='column' mt='7'>
-                    <Heading color='gray.700' mb='2' size='md'>{product.name}</Heading>
+                    <Heading mb='2' size='md'>{product.name}</Heading>
                     <Text dir='rtl' color='gray.600'>{product.description}</Text>
-                    <Box flex='1' />
-                    <Text color='gray.700' size='large' fontSize='lg'>{product.price} ₪</Text>
+                    <Spacer />
+                    <HStack w='100%'>
+                      <Text size='large' fontSize='lg'>{product.price} ₪</Text>
+                      <Spacer />
+                      {
+                        !product.tempStock &&
+                        <Tag size='sm' colorScheme='red'>אין במלאי</Tag>
+                      }
+                    </HStack>
                   </Flex>
                 </Box>
               </Fade>

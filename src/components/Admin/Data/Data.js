@@ -28,10 +28,10 @@ const Data = () => {
 
   return (
     <VStack align='stretch' dir='rtl' spacing='10' py='50px'>
-      <Heading size='md' alignSelf='start' color='gray.700'>מוצרים</Heading>
+      <Heading size='md' alignSelf='start' >מוצרים</Heading>
       <ProductsTable products={filteredProducts} summary />
 
-      <Heading size='md' alignSelf='start' color='gray.700'>משלוחים</Heading>
+      <Heading size='md' alignSelf='start' >משלוחים</Heading>
       <ShippingMethodsTable shippingMethods={filterShippingMethods} summary />
 
       <Carts />

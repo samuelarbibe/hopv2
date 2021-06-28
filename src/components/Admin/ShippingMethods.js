@@ -66,7 +66,7 @@ const ShippingMethods = () => {
   return (
     <VStack pt='10' spacing='5' dir='rtl'>
       <HStack w='100%'>
-        <Heading size='md' alignSelf='start' color='gray.700'>משלוחים</Heading>
+        <Heading size='md' alignSelf='start'>משלוחים</Heading>
         <Spacer />
         <Button variant='ghost' colorScheme='green' onClick={() => history.push(`${url}/edit/new`)}>הוסף מוצר חדש</Button>
       </HStack>

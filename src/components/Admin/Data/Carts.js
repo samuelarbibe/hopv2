@@ -25,7 +25,7 @@ const Carts = () => {
 
   return (
     <VStack pt='10' spacing='5' dir='rtl' align='stretch'>
-      <Heading size='md' color='gray.700'>עגלות</Heading>
+      <Heading size='md' >עגלות</Heading>
       <StatGroup border="1px" borderColor="gray.200" rounded='lg' p='5'>
         <Stat>
           <StatLabel>פעילות</StatLabel>

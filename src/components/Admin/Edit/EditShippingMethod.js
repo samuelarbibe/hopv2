@@ -200,7 +200,7 @@ const EditShippingMethod = () => {
   return (
     <VStack pt='10' spacing='5' align='stretch' dir='rtl' pb='10'>
       <HStack w='100%'>
-        <Heading size='md' alignSelf='end' color='gray.700'>עריכת משלוח</Heading>
+        <Heading size='md' alignSelf='end' >עריכת משלוח</Heading>
         <Spacer />
         {
           !isNew &&
@@ -307,7 +307,7 @@ const EditShippingMethod = () => {
         </VStack>
       </Stack>
       <ButtonGroup pt='5' w='100%' justifyContent='space-between'>
-        <Button disabled={!canSave} type='submit' colorScheme='pink' onClick={handleSave}>
+        <Button disabled={!canSave} type='submit' colorScheme='brand' onClick={handleSave}>
           {
             isNew ? 'הוסף משלוח' : 'שמור שינויים'
           }

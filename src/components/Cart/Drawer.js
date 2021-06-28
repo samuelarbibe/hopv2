@@ -75,7 +75,7 @@ const CheckoutDrawer = () => {
     >
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerCloseButton />
+        <DrawerCloseButton zIndex='999' />
         {
           errors ||
           <>
@@ -94,7 +94,7 @@ const CheckoutDrawer = () => {
                   <Button
                     alignSelf='end'
                     dir='rtl'
-                    colorScheme='pink'
+                    colorScheme='brand'
                     size='lg'
                     variant='outline'
                     onClick={() => setStage((prev) => prev - 1)}
@@ -109,7 +109,7 @@ const CheckoutDrawer = () => {
                 <Button
                   alignSelf='start'
                   dir='rtl'
-                  colorScheme='pink'
+                  colorScheme='brand'
                   size='lg'
                   disabled={!stages[stage + 1].allowed()}
                   onClick={() => setStage((prev) => prev + 1)}
