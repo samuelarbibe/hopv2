@@ -63,8 +63,14 @@ const Cart = ({ cart, products, shippingMethods }) => {
         <Text fontSize='lg' >{intermidiateSum} ₪ </Text>
       </HStack>
       <HStack justify='space-between'>
-        <Text fontSize='lg' fontWeight='bold' color='gray.800' >משלוח</Text>
-        <Text fontSize='lg'>{selectedShippingMethod ? `${selectedShippingMethod.price} ₪` : ' לא נבחר'}</Text>
+        <Text fontSize='lg' fontWeight='bold' color='gray.800' >{!selectedShippingMethod || selectedShippingMethod.type === 'delivery' ? 'משלוח' : 'איסוף עצמי'}</Text>
+        <Text fontSize='lg'>
+          {selectedShippingMethod
+            ? (
+              !selectedShippingMethod.price || intermidiateSum > selectedShippingMethod.freeAbove ? 'חינם' : `${selectedShippingMethod.price} ₪`
+            )
+            : ' לא נבחר'}
+        </Text>
       </HStack>
     </VStack>
   )

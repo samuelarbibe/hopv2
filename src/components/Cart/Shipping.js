@@ -12,11 +12,11 @@ import {
 
 import { setShippingMethod } from '../../utils/cart'
 
-const ShippingOptionsHeader = ({ method }) => {
+const ShippingOptionsHeader = ({ method, intermidiateSum }) => {
   return (
     <AccordionButton height='50px' _expanded={{ bg: 'gray.100' }} justifyContent='space-between'>
       <Text fontSize='lg' fontWeight='bold'>{method.name}</Text>
-      <Text fontSize='lg'>{method.price ? `${method.price} ₪` : 'חינם'} </Text>
+      <Text fontSize='lg'>{!method.price || intermidiateSum > method.freeAbove ? 'חינם' : `${method.price} ₪`} </Text>
     </AccordionButton>
   )
 }
@@ -43,13 +43,13 @@ const ShippingOptionsRadio = ({ method, methodOptions, selectedOptionId, onChang
   )
 }
 
-const Shipping = ({ cart, shippingMethods }) => {
+const Shipping = ({ cart, products, shippingMethods }) => {
   const uniqueShippingMethods = useMemo(() => {
     const seen = {}
 
     return shippingMethods.filter((method) => {
-      if (seen[method._id]) return false
-      seen[method._id] = true
+      if (seen[method.type]) return false
+      seen[method.type] = true
       return true
     })
   }, [shippingMethods])
@@ -69,6 +69,17 @@ const Shipping = ({ cart, shippingMethods }) => {
     return shippingMethods.find((method) => method._id === cart.shippingMethod)
   }, [cart, shippingMethods])
 
+  const cartItems = useMemo(() => {
+    return cart.items.map((item) => {
+      const product = products.find((product) => product._id === item.productId)
+      return { ...item, ...product }
+    })
+  }, [cart, products])
+
+  const intermidiateSum = cartItems.reduce((acc, curr) => {
+    return acc + curr.amount * curr.price
+  }, 0)
+
   return (
     <VStack py='5' align='stretch' dir='rtl'>
       <Heading mb='2'>בחר משלוח</Heading>
@@ -77,10 +88,12 @@ const Shipping = ({ cart, shippingMethods }) => {
           uniqueShippingMethods.map((method, index) => {
             return (
               <AccordionItem isDisabled={method.tempStock === 0 && selectedShippingMethod?._id !== method._id} key={index} id={method._id}>
-                <ShippingOptionsHeader method={method} />
+                <ShippingOptionsHeader intermidiateSum={intermidiateSum} method={method} />
                 <AccordionPanel pb={4}>
                   <Box py='2'>
                     {method.description}
+                    <br />
+                    {method.freeAbove && `חינם בקניה מעל ${method.freeAbove} ₪`}
                   </Box>
                   <ShippingOptionsRadio
                     method={method}
@@ -96,10 +109,14 @@ const Shipping = ({ cart, shippingMethods }) => {
       {
         selectedShippingMethod &&
         <Box p='8' backgroundColor='gray.100' fontSize='20px' >
+          {`ההזמנה ${selectedShippingMethod.type === 'pickup' ? 'תחכה לאיסוף' : 'תישלח לביתך'}`}
+          <br />
           {
-            `ההזמנה ${selectedShippingMethod.type === 'pickup' ? 'תחכה לאיסוף' : 'תישלח לביתך'}` +
             ` ב${new Date(selectedShippingMethod.from).toLocaleString('he-IL', { weekday: 'long' })}` +
-            ` ${new Date(selectedShippingMethod.from).toLocaleDateString('he-IL')}` +
+            ` ${new Date(selectedShippingMethod.from).toLocaleDateString('he-IL')}`
+          }
+          <br />
+          {
             ` בין השעות ${new Date(selectedShippingMethod.from).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}` +
             ` ל- ${new Date(selectedShippingMethod.to).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })} `
           }

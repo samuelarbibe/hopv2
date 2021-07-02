@@ -7,8 +7,8 @@ import ProductsTable from './ProductsTable'
 import ShippingMethodsTable from './ShippingMethodsTable'
 
 const Data = () => {
-  const { data: shippingMethods, isErrorShippingMethod } = useSWR('/api/shippingMethods', { refreshInterval: 5000 })
-  const { data: products, isErrorProducts } = useSWR('/api/products', { refreshInterval: 5000 })
+  const { data: shippingMethods, isErrorShippingMethod } = useSWR('/api/shippingMethods/all', { refreshInterval: 5000 })
+  const { data: products, isErrorProducts } = useSWR('/api/products/all', { refreshInterval: 5000 })
 
   const filteredProducts = useMemo(() => products?.filter((product) => product.stock), [products])
   const filterShippingMethods = useMemo(() => shippingMethods?.filter((shippingMethod) => shippingMethod.stock), [shippingMethods])

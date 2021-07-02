@@ -43,11 +43,6 @@ export const updateCart = async (productId, amount) => {
   }
 }
 
-export const useEmptyCart = async () => {
-  await axios.delete('/api/cart')
-  mutate('/api/cart')
-}
-
 export const setShippingMethod = async (shippingMethodId) => {
   mutate('/api/cart', (cart) => {
     const tempUpdatedCart = { ...cart, shippingMethod: shippingMethodId }
@@ -71,5 +66,22 @@ export const setShippingMethod = async (shippingMethodId) => {
     console.log('Error!!!')
     mutate('/api/shippingMethods')
     mutate('/api/cart')
+  }
+}
+
+export const setCustomerAddress = async (address, houseNumber) => {
+  mutate('/api/cart', (cart) => {
+    const tempUpdatedCart = { ...cart, customerDetails: { address, houseNumber } }
+    return tempUpdatedCart
+  }, false)
+
+  try {
+    const { data: updatedCart } = await axios.put('/api/cart/address', { address, houseNumber })
+    mutate('/api/cart', updatedCart, false)
+    return true
+  } catch (err) {
+    console.log('Error!!!')
+    mutate('/api/cart')
+    return false
   }
 }

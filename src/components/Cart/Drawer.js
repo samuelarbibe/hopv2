@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import useSWR from 'swr'
 
 import {
@@ -11,11 +11,13 @@ import {
 import { useCartTimer } from './CartTimer'
 import { useCart } from '../../hooks/useCart'
 import Cart from './Cart'
+import Address from './Address'
 import Shipping from './Shipping'
 
 const CheckoutDrawer = () => {
   const { isOpen, onClose } = useCart()
   const [stage, setStage] = useState(0)
+  const [isCurrentStageValid, setIsCurrentStageValid] = useState(false)
 
   const { data: cart, isError: isCartError } = useSWR('/api/cart', { refreshInterval: 5000, isPaused: () => !isOpen })
   const { data: products, isError: isProductsError } = useSWR('/api/products')
@@ -45,6 +47,8 @@ const CheckoutDrawer = () => {
     return null
   }, [cart, cartTimer, isCartError, isCartTimerError, isProductsError, products])
 
+  const isSelectedShippingDelivery = useMemo(() => shippingMethods?.find((method) => method._id === cart?.shippingMethod)?.type === 'delivery', [shippingMethods, cart])
+
   const stages = useMemo(() => {
     if (errors) return []
     return [
@@ -55,16 +59,33 @@ const CheckoutDrawer = () => {
       },
       {
         name: 'בחירת משלוח',
-        component: <Shipping cart={cart} shippingMethods={shippingMethods} />,
+        component: <Shipping cart={cart} shippingMethods={shippingMethods} products={products} />,
         allowed: () => true
       },
+      ...(isSelectedShippingDelivery ? [
+        {
+          name: 'פרטי משלוח',
+          component: <Address customerDetails={cart.customerDetails} setIsValid={setIsCurrentStageValid} />,
+          allowed: () => cart.shippingMethod
+        },
+      ] : []),
       {
         name: 'תשלום',
-        component: () => null,
-        allowed: () => cart.shippingMethod
+        component: <Spacer />,
+        allowed: () => {
+          return isSelectedShippingDelivery
+            ? isCurrentStageValid
+            : cart.shippingMethod
+        }
       },
     ]
-  }, [errors, cart, shippingMethods, products])
+  }, [errors, cart, shippingMethods, products, isSelectedShippingDelivery, isCurrentStageValid])
+
+  useEffect(() => {
+    if (stages.length && stage >= 1 && !stages[stage].allowed()) {
+      setStage((prev) => prev - 1)
+    }
+  }, [stage, isOpen])
 
   return (
     <Drawer
