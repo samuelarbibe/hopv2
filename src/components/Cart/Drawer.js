@@ -135,7 +135,7 @@ const CheckoutDrawer = () => {
                   disabled={!stages[stage + 1].allowed()}
                   onClick={() => setStage((prev) => prev + 1)}
                 >
-                  {`המשך ל${stages[stage + 1].name}`}
+                  המשך
                 </Button>
               }
             </DrawerFooter>

@@ -8,7 +8,7 @@ import {
   Container, Flex, Image, Menu,
   MenuButton, MenuList, MenuItem,
 } from '@chakra-ui/react'
-import { GrShop } from 'react-icons/gr'
+import { AiOutlineShopping } from 'react-icons/ai'
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 
 import { useCart } from '../hooks/useCart'
@@ -26,7 +26,7 @@ const Navbar = () => {
   const adminMode = pathname.includes('admin')
 
   return (
-    <Center position='fixed' width='100%' boxShadow='sm' zIndex='999'>
+    <Center position='fixed' width='100%' borderBottomWidth='1px' zIndex='999'>
       <Container maxWidth='container.lg' px='0' {...bindLongPress}>
         <Flex p='3' background='white' justifyContent='space-between'>
           <Box onClick={() => history.push('')} textAlign='center'>
@@ -55,7 +55,7 @@ const Navbar = () => {
                   colorScheme='brand'
                   variant='ghost'
                   onClick={onOpenCart}
-                  icon={<GrShop size='1.4em' color='brand' />}
+                  icon={<AiOutlineShopping size='1.6em' color='brand' />}
                 />
               )
           }
