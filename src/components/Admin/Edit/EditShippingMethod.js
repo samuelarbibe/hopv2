@@ -10,12 +10,13 @@ import {
   Input, FormErrorMessage, Textarea, NumberInput,
   NumberInputField, NumberInputStepper, NumberIncrementStepper,
   NumberDecrementStepper, Button, ButtonGroup, useToast, Select,
-  Stack, HStack, Spacer,
+  Stack, HStack, Spacer, Box,
 } from '@chakra-ui/react'
 
 import { addShippingMethod, deleteShippingMethod, updateShippingMethod } from '../../../utils/shippingMethod'
 import DatePicker from '../../../libs/datepicker/DatePicker'
 import DeleteButton from './DeleteButton'
+import ShippingMap from './ShippingMap'
 
 const defaultShippingMethod = {
   name: '',
@@ -135,6 +136,14 @@ const EditShippingMethod = () => {
     }))
   }
 
+  const handleChangeArea = (area) => {
+    const updatedArea = area.coordinates?.length ? area : undefined
+    setTempShippingMethod((prev) => ({
+      ...prev,
+      area: updatedArea
+    }))
+  }
+
   const handleSave = async () => {
     const updatedId = isNew
       ? await addShippingMethod(tempShippingMethod)
@@ -214,16 +223,6 @@ const EditShippingMethod = () => {
       </HStack>
       <Stack direction={{ base: 'column', md: 'row-reverse' }} alignItems='stretch' spacing='8'>
         <VStack flex='1'>
-          <FormControl id="stock">
-            <FormLabel htmlFor='stock'>מלאי</FormLabel>
-            <NumberInput dir='ltr' value={tempShippingMethod.stock} min={isNew ? 0 : shippingMethod.stock - shippingMethod.tempStock} onChange={onStockUpdate}>
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-          </FormControl>
           <FormControl id="date">
             <FormLabel htmlFor='date'>ביום</FormLabel>
             <DatePicker selected={new Date(tempShippingMethod.from)} onChange={handleDateChange} dateFormat="dd/MM/yyyy" />
@@ -255,6 +254,16 @@ const EditShippingMethod = () => {
               />
             </FormControl>
           </HStack>
+          {
+            tempShippingMethod.type === 'delivery' &&
+            <FormControl id='area' isInvalid={!tempShippingMethod.area}>
+              <FormLabel htmlFor='area'>אזור משלוח</FormLabel>
+              <Box h='350px' w='100%'>
+                <ShippingMap initialArea={tempShippingMethod.area} onChangeArea={handleChangeArea} />
+              </Box>
+              <FormErrorMessage>אזור המשלוח לא יכול להיות ריק</FormErrorMessage>
+            </FormControl>
+          }
         </VStack>
         <VStack flex='1'>
           <FormControl id="name" isInvalid={!tempShippingMethod.name.length}>
@@ -304,6 +313,16 @@ const EditShippingMethod = () => {
               </NumberInput>
             </FormControl>
           }
+          <FormControl id="stock">
+            <FormLabel htmlFor='stock'>מלאי</FormLabel>
+            <NumberInput dir='ltr' value={tempShippingMethod.stock} min={isNew ? 0 : shippingMethod.stock - shippingMethod.tempStock} onChange={onStockUpdate}>
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </FormControl>
         </VStack>
       </Stack>
       <ButtonGroup pt='5' w='100%' justifyContent='space-between'>

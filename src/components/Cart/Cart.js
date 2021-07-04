@@ -67,7 +67,9 @@ const Cart = ({ cart, products, shippingMethods }) => {
         <Text fontSize='lg'>
           {selectedShippingMethod
             ? (
-              !selectedShippingMethod.price || intermidiateSum > selectedShippingMethod.freeAbove ? 'חינם' : `${selectedShippingMethod.price} ₪`
+              (!selectedShippingMethod.price ||
+                (selectedShippingMethod.freeAbove && intermidiateSum > selectedShippingMethod.freeAbove))
+                ? 'חינם' : `${selectedShippingMethod.price} ₪`
             )
             : ' לא נבחר'}
         </Text>

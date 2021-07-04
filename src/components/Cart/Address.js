@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
 import { setCustomerAddress } from '../../utils/cart'
+import { useConsts } from '../../hooks/useConsts'
 
 const useAddress = (customerAddress) => {
   const addressWithCity = customerAddress + ' תל אביב יפו'
@@ -23,16 +24,9 @@ const useAddress = (customerAddress) => {
       setIsLoading(true)
       try {
         const { data } = await axios.get(`/api/address/geocode/${addressWithCity}`)
-
-        if (!data.streetName || !data.city || !data.country) {
-          setError('אופס! אנחנו לא שולחים לשם...')
-        } else if (!data.streetNumber) {
-          setError('מספר בית לא תקין')
-        }
-
         setData(data)
       } catch (error) {
-        setError('אירעה בעיה לא צפויה')
+        setError('אופס! אנחנו לא שולחים לשם...')
         setData(null)
       }
       setIsLoading(false)
@@ -146,6 +140,7 @@ const HouseNumberInput = ({ defaultValue, onChange }) => {
 }
 
 const Address = ({ customerDetails, setIsValid }) => {
+  const { consts } = useConsts()
   const [address, setAddress] = useState(customerDetails?.address || '')
   const [houseNumber, setHouseNumber] = useState(customerDetails?.houseNumber || '')
   const [isPrivateHouse, setIsPrivateHouse] = useState(customerDetails?.houseNumber === 0)
@@ -183,7 +178,7 @@ const Address = ({ customerDetails, setIsValid }) => {
     <VStack py='5' align='stretch' dir='rtl'>
       <Heading mb='2'>פרטי משלוח</Heading>
       <Text>
-        שים ❤: המשלוח לתל אביב בלבד!
+        {consts('delivery_address_note')}
       </Text>
       <AddressInput
         defaultValue={address}

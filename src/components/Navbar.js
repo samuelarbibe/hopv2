@@ -45,6 +45,7 @@ const Navbar = () => {
                         <MenuItem bgColor={pathname.includes('products') ? 'gray.100' : 'white'} onClick={() => history.push('/admin/products')}>מוצרים</MenuItem>
                         <MenuItem bgColor={pathname.includes('shippingMethods') ? 'gray.100' : 'white'} onClick={() => history.push('/admin/shippingMethods')}>משלוחים</MenuItem>
                         <MenuItem bgColor={pathname.includes('carts') ? 'gray.100' : 'white'} onClick={() => history.push('/admin/carts')}>עגלות</MenuItem>
+                        <MenuItem bgColor={pathname.includes('consts') ? 'gray.100' : 'white'} onClick={() => history.push('/admin/consts')}>משתני סביבה</MenuItem>
                       </MenuList>
                     </>
                   )}

@@ -73,7 +73,7 @@ const ProductPage = () => {
         </Box>
         <Flex direction='column' flex={1}>
           <VStack align='stretch'>
-            <Heading mb='3' size='lg'>{product.name}</Heading>
+            <Heading size='lg'>{product.name}</Heading>
             <Text dir='rtl' color='gray.600'>{product.description}</Text>
             <HStack w='100%'>
               <Text size='large' fontSize='lg' fontWeight='bold'>{product.price} ₪</Text>

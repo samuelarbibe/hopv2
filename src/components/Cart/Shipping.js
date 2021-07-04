@@ -16,7 +16,7 @@ const ShippingOptionsHeader = ({ method, intermidiateSum }) => {
   return (
     <AccordionButton height='50px' _expanded={{ bg: 'gray.100' }} justifyContent='space-between'>
       <Text fontSize='lg' fontWeight='bold'>{method.name}</Text>
-      <Text fontSize='lg'>{!method.price || intermidiateSum > method.freeAbove ? 'חינם' : `${method.price} ₪`} </Text>
+      <Text fontSize='lg'>{!method.price || (method.freeAbove && intermidiateSum > method.freeAbove) ? 'חינם' : `${method.price} ₪`} </Text>
     </AccordionButton>
   )
 }
@@ -93,7 +93,7 @@ const Shipping = ({ cart, products, shippingMethods }) => {
                   <Box py='2'>
                     {method.description}
                     <br />
-                    {method.freeAbove && `חינם בקניה מעל ${method.freeAbove} ₪`}
+                    {!!method.freeAbove && `חינם בקניה מעל ${method.freeAbove} ₪ `}
                   </Box>
                   <ShippingOptionsRadio
                     method={method}
