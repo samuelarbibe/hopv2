@@ -3,7 +3,10 @@ import mapboxgl from 'mapbox-gl'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
-mapboxgl.accessToken = 'pk.eyJ1Ijoic2FtdWVsYXJiaWJlIiwiYSI6ImNrcW5vNng5MDBicTcycXFud2M4YTJ3M3QifQ.G31XDSRgDpMmNPyPdvnwng'
+import workerLoader from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker'
+
+mapboxgl.workerClass = workerLoader
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API_KEY
 
 import { Box } from '@chakra-ui/react'
 
