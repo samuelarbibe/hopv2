@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import {
   Text, VStack,
   Table, Tr, Tbody, Td, Image,
-  HStack, Heading
+  HStack, Heading, Divider
 } from '@chakra-ui/react'
 
 const Cart = ({ cart, products, shippingMethods }) => {
@@ -62,6 +62,7 @@ const Cart = ({ cart, products, shippingMethods }) => {
         <Text fontSize='lg' fontWeight='bold' color='gray.800'>סכום ביניים</Text>
         <Text fontSize='lg' >{intermidiateSum} ₪ </Text>
       </HStack>
+      <Divider />
       <HStack justify='space-between'>
         <Text fontSize='lg' fontWeight='bold' color='gray.800' >{!selectedShippingMethod || selectedShippingMethod.type === 'delivery' ? 'משלוח' : 'איסוף עצמי'}</Text>
         <Text fontSize='lg'>

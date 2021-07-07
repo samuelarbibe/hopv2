@@ -26,12 +26,12 @@ const ProductPage = () => {
   const { data: cart, isErrorCart } = useSWR('/api/cart')
 
   const amountInCart = cart?.items.find((item) => item.productId === id)?.amount || 0
-  const [tempAmount, setTempAmount] = useState(() => amountInCart)
+  const [tempAmount, setTempAmount] = useState(() => amountInCart || 1)
   const [isLoading, setIsLoading] = useState(false)
   const amountDiff = useMemo(() => tempAmount - amountInCart, [tempAmount, amountInCart])
 
   useEffect(() => {
-    setTempAmount(amountInCart)
+    setTempAmount(amountInCart || 1)
   }, [cart, id, product, amountInCart])
 
   if (isErrorProduct || isErrorCart) return (
@@ -75,26 +75,39 @@ const ProductPage = () => {
           <VStack align='stretch'>
             <Heading size='lg'>{product.name}</Heading>
             <Text dir='rtl' color='gray.600'>{product.description}</Text>
-            <HStack w='100%'>
-              <Text size='large' fontSize='lg' fontWeight='bold'>{product.price} ₪</Text>
-              <Spacer />
-              {
-                !product.tempStock &&
-                <Tag size='sm' colorScheme='red'>אין במלאי</Tag>
-              }
-            </HStack>
           </VStack>
           <Spacer py='3' />
-          <VStack align='stretch' spacing='3'>
-            <Flex direction='row-reverse' justifyContent='space-between'>
-              <Text dir='rtl' alignSelf='center' fontSize='xl' fontWeight='bold' >כמות: </Text>
-              <ButtonGroup >
-                <IconButton disabled={isLoading || amountDiff >= product.tempStock} icon={<AddIcon />} size='lg' onClick={() => handleClick('add')} />
-                <Text width='8' textAlign='center' alignSelf='center' fontSize='xl' fontWeight='bold' >{tempAmount}</Text>
-                <IconButton disabled={isLoading || tempAmount === 0} icon={<MinusIcon />} size='lg' onClick={() => handleClick('sub')} />
-              </ButtonGroup>
-            </Flex>
-            <SlideFade in={true}>
+          <VStack align='stretch' spacing='5'>
+            <HStack w='100%'>
+              {
+                !product.tempStock
+                  ? <Tag size='sm' colorScheme='red'>אין במלאי</Tag>
+                  : (
+                    <ButtonGroup isAttached>
+                      <IconButton
+                        backgroundColor='gray.50'
+                        _disabled={{ color: 'gray.300', opacity: 1 }}
+                        borderRadius='xl'
+                        disabled={isLoading || amountDiff >= product.tempStock}
+                        icon={<AddIcon height='13px' />}
+                        onClick={() => handleClick('add')} />
+                      <Box width='10' backgroundColor='gray.50' display='flex' alignItems='center' justifyContent='center'>
+                        <Text textAlign='center' fontSize='lg' fontWeight='bold' >{tempAmount}</Text>
+                      </Box>
+                      <IconButton
+                        backgroundColor='gray.50'
+                        _disabled={{ color: 'gray.300', opacity: 1 }}
+                        borderRadius='xl'
+                        disabled={isLoading || tempAmount === 0}
+                        icon={<MinusIcon height='12px' />}
+                        onClick={() => handleClick('sub')} />
+                    </ButtonGroup>
+                  )
+              }
+              <Spacer />
+              <Text size='large' fontSize='lg' fontWeight='bold'>{product.price * tempAmount || product.price} ₪</Text>
+            </HStack>
+            <SlideFade in>
               <Button
                 dir='rtl'
                 isLoading={isLoading}
@@ -102,6 +115,8 @@ const ProductPage = () => {
                 disabled={(tempAmount === 0 && amountInCart === 0) || tempAmount === amountInCart}
                 colorScheme='brand'
                 size='lg'
+                borderRadius='2xl'
+                height='60px'
                 isFullWidth
                 onClick={() => handleClick('save')}
               >
