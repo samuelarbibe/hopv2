@@ -38,17 +38,17 @@ const Cart = ({ cart, products, shippingMethods }) => {
                     <Image src={item.images[0]} height={{ base: '100px', md: '150px' }} />
                   </Td>
                   <Td p='1'>
-                    <Text fontSize='md' fontWeight='bold'  >
+                    <Text fontSize='md' >
                       {item.name}
                     </Text>
                   </Td>
                   <Td p='1'>
-                    <Text width='30px' fontSize='md' fontWeight='bold'  >
+                    <Text width='30px' fontSize='md' >
                       {item.amount} X
                     </Text>
                   </Td>
                   <Td p='1' isNumeric wordBreak='unset'>
-                    <Text width='50px' fontWeight='bold'  >
+                    <Text width='50px' >
                       {item.price * item.amount} ₪
                     </Text>
                   </Td>

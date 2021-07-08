@@ -27,6 +27,7 @@
     "react-responsive-carousel": "^3.2.18",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "react-spring": "^9.2.3",
     "react-timer-hook": "^3.0.3",
     "swr": "^0.5.6",
     "use-debounce": "^7.0.0",

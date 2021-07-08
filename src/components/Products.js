@@ -1,16 +1,25 @@
 import React from 'react'
 import useSWR from 'swr'
 import { useHistory } from 'react-router'
+import { useTrail, animated } from 'react-spring'
 
 import {
   Alert, AlertIcon, AlertTitle, Image, Box,
-  Center, Flex, Heading, SimpleGrid, Text, Spinner, Fade,
+  Center, Flex, Heading, SimpleGrid, Text, Spinner,
   Spacer, HStack, Tag,
 } from '@chakra-ui/react'
 
 const Products = () => {
   const history = useHistory()
   const { data: products, isError } = useSWR('/api/products')
+
+  const open = !!products
+  const trail = useTrail(products?.length || 0, {
+    config: { mass: 5, tension: 2000, friction: 200 },
+    opacity: open ? 1 : 0,
+    x: open ? 0 : 20,
+    from: { opacity: 0, x: 20 },
+  })
 
   if (isError) return (
     <Alert status='error'>
@@ -32,7 +41,7 @@ const Products = () => {
           .sort((product) => product.tempStock)
           .map((product, index) => {
             return (
-              <Fade in key={index}>
+              <animated.div key={index} style={trail[index]}>
                 <Box onClick={() => history.push(`/product/${product._id}`)} >
                   <Box height='400px'>
                     <Image height='100%' width='100%' src={product.images[0]} fit='cover' />
@@ -51,7 +60,7 @@ const Products = () => {
                     </HStack>
                   </Flex>
                 </Box>
-              </Fade>
+              </animated.div>
             )
           })
       }
