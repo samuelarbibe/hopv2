@@ -2,7 +2,9 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { TouchBackend } from 'react-dnd-touch-backend'
 import { ChakraProvider, Container } from '@chakra-ui/react'
+import { isMobile } from 'react-device-detect'
 
 import { CartProvider } from './hooks/useCart'
 import { AuthProvider } from './hooks/useAuth'
@@ -21,7 +23,7 @@ function App() {
     <ChakraProvider theme={theme}>
       <CartProvider>
         <AuthProvider>
-          <DndProvider backend={HTML5Backend}>
+          <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
             <Navbar />
             <Container maxWidth='container.lg' height='100%' pt='64px'>
               <Switch>
