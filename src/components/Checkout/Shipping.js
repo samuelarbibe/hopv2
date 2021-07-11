@@ -1,13 +1,9 @@
 import React, { useMemo } from 'react'
 
 import {
-  VStack,
+  VStack, Stack,
   Text, Accordion, AccordionItem, AccordionButton,
-  AccordionPanel,
-  RadioGroup,
-  Radio,
-  Box,
-  Heading,
+  AccordionPanel, RadioGroup, Radio, Box, Heading,
 } from '@chakra-ui/react'
 
 import { setShippingMethod } from '../../utils/cart'
@@ -81,47 +77,51 @@ const Shipping = ({ cart, products, shippingMethods }) => {
   }, 0)
 
   return (
-    <VStack py='5' align='stretch' dir='rtl'>
+    <VStack py='5' align='stretch' dir='rtl' alignItems='stretch' justifyContent='stretch'>
       <Heading mb='2'>בחר משלוח</Heading>
-      <Accordion defaultIndex={uniqueShippingMethods.findIndex((method) => selectedShippingMethod?.type === method.type)}>
-        {
-          uniqueShippingMethods.map((method, index) => {
-            return (
-              <AccordionItem isDisabled={method.tempStock === 0 && selectedShippingMethod?._id !== method._id} key={index} id={method._id}>
-                <ShippingOptionsHeader intermidiateSum={intermidiateSum} method={method} />
-                <AccordionPanel pb={4}>
-                  <Box py='2'>
-                    {method.description}
-                    <br />
-                    {!!method.freeAbove && `חינם בקניה מעל ${method.freeAbove} ₪ `}
-                  </Box>
-                  <ShippingOptionsRadio
-                    method={method}
-                    methodOptions={shippingMethodsByType}
-                    selectedOptionId={selectedShippingMethod?._id}
-                    onChange={(selectedOptionId) => setShippingMethod(selectedOptionId)} />
-                </AccordionPanel>
-              </AccordionItem>
-            )
-          })
-        }
-      </Accordion>
-      {
-        selectedShippingMethod &&
-        <Box p='8' backgroundColor='gray.100' fontSize='20px' >
-          {`ההזמנה ${selectedShippingMethod.type === 'pickup' ? 'תחכה לאיסוף' : 'תישלח לביתך'}`}
-          <br />
+      <Stack direction={{ base: 'column', md: 'row' }} spacing='8'>
+        <Accordion flex='1' defaultIndex={uniqueShippingMethods.findIndex((method) => selectedShippingMethod?.type === method.type)}>
           {
-            ` ב${new Date(selectedShippingMethod.from).toLocaleString('he-IL', { weekday: 'long' })}` +
-            ` ${new Date(selectedShippingMethod.from).toLocaleDateString('he-IL')}`
+            uniqueShippingMethods.map((method, index) => {
+              return (
+                <AccordionItem isDisabled={method.tempStock === 0 && selectedShippingMethod?._id !== method._id} key={index} id={method._id}>
+                  <ShippingOptionsHeader intermidiateSum={intermidiateSum} method={method} />
+                  <AccordionPanel pb={4}>
+                    <Box py='2'>
+                      {method.description}
+                      <br />
+                      {!!method.freeAbove && `חינם בקניה מעל ${method.freeAbove} ₪ `}
+                    </Box>
+                    <ShippingOptionsRadio
+                      method={method}
+                      methodOptions={shippingMethodsByType}
+                      selectedOptionId={selectedShippingMethod?._id}
+                      onChange={(selectedOptionId) => setShippingMethod(selectedOptionId)} />
+                  </AccordionPanel>
+                </AccordionItem>
+              )
+            })
           }
-          <br />
+        </Accordion>
+        <Box flex='1'>
           {
-            ` בין השעות ${new Date(selectedShippingMethod.from).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}` +
-            ` ל- ${new Date(selectedShippingMethod.to).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })} `
+            selectedShippingMethod &&
+            <Box p='8' w='100%' backgroundColor='gray.100' fontSize='20px'>
+              {`ההזמנה ${selectedShippingMethod.type === 'pickup' ? 'תחכה לאיסוף' : 'תישלח לביתך'}`}
+              <br />
+              {
+                ` ב${new Date(selectedShippingMethod.from).toLocaleString('he-IL', { weekday: 'long' })}` +
+                ` ${new Date(selectedShippingMethod.from).toLocaleDateString('he-IL')}`
+              }
+              <br />
+              {
+                ` בין השעות ${new Date(selectedShippingMethod.from).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}` +
+                ` ל- ${new Date(selectedShippingMethod.to).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })} `
+              }
+            </Box>
           }
         </Box>
-      }
+      </Stack>
     </VStack >
   )
 }

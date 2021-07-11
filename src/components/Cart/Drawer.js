@@ -1,28 +1,32 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import useSWR from 'swr'
+import { Redirect, useLocation } from 'react-router-dom'
 
 import {
   Spinner, Alert, AlertIcon, AlertTitle,
   Text, Center, Button,
   Drawer, DrawerOverlay, DrawerCloseButton,
-  DrawerContent, DrawerFooter, DrawerBody, Spacer, Fade,
+  DrawerContent, DrawerFooter, DrawerBody, Fade,
 } from '@chakra-ui/react'
 
-import { useCartTimer } from './CartTimer'
+import { useCartTimer } from '../CartTimer'
 import { useCart } from '../../hooks/useCart'
 import Cart from './Cart'
-import Address from './Address'
-import Shipping from './Shipping'
 
 const CheckoutDrawer = () => {
-  const { isOpen, onClose } = useCart()
-  const [stage, setStage] = useState(0)
-  const [isCurrentStageValid, setIsCurrentStageValid] = useState(false)
+  const { pathname } = useLocation()
+  const isInCheckoutRoute = pathname.includes('checkout')
+  const [redirect, setRedirect] = useState('')
 
+  const { isOpen, onClose } = useCart()
   const { data: cart, isError: isCartError } = useSWR('/api/cart', { refreshInterval: 5000, isPaused: () => !isOpen })
   const { data: products, isError: isProductsError } = useSWR('/api/products')
   const { data: shippingMethods, isError: isShippingMethodsError } = useSWR('/api/shippingMethods')
   const { data: cartTimer, isError: isCartTimerError } = useCartTimer()
+
+  useEffect(() => {
+    if (!isOpen) setRedirect('')
+  }, [isOpen])
 
   const errors = useMemo(() => {
     if (isCartError || isProductsError || isCartTimerError || isShippingMethodsError) return (
@@ -47,52 +51,14 @@ const CheckoutDrawer = () => {
     return null
   }, [cart, cartTimer, isCartError, isCartTimerError, isProductsError, products])
 
-  const isSelectedShippingDelivery = useMemo(() => shippingMethods?.find((method) => method._id === cart?.shippingMethod)?.type === 'delivery', [shippingMethods, cart])
-
-  const stages = useMemo(() => {
-    if (errors) return []
-    return [
-      {
-        name: 'עגלה',
-        component: <Cart cart={cart} shippingMethods={shippingMethods} products={products} />,
-        allowed: () => true
-      },
-      {
-        name: 'בחירת משלוח',
-        component: <Shipping cart={cart} shippingMethods={shippingMethods} products={products} />,
-        allowed: () => true
-      },
-      ...(isSelectedShippingDelivery ? [
-        {
-          name: 'פרטי משלוח',
-          component: <Address customerDetails={cart.customerDetails} setIsValid={setIsCurrentStageValid} />,
-          allowed: () => cart.shippingMethod
-        },
-      ] : []),
-      {
-        name: 'תשלום',
-        component: <Spacer />,
-        allowed: () => {
-          return isSelectedShippingDelivery
-            ? isCurrentStageValid
-            : cart.shippingMethod
-        }
-      },
-    ]
-  }, [errors, cart, shippingMethods, products, isSelectedShippingDelivery, isCurrentStageValid])
-
-  useEffect(() => {
-    if (stages.length && stage >= 1 && !stages[stage].allowed()) {
-      setStage((prev) => prev - 1)
-    }
-  }, [stage, isOpen])
+  if (redirect) return <Redirect to='/checkout' />
 
   return (
     <Drawer
       isOpen={isOpen}
       placement='right'
       onClose={onClose}
-      size='sm'
+      size='xs'
     >
       <DrawerOverlay />
       <DrawerContent>
@@ -100,46 +66,25 @@ const CheckoutDrawer = () => {
         {
           errors ||
           <>
-            <DrawerBody pt='50px'>
+            <DrawerBody pt='50px' px='5'>
               <Alert dir='rtl' status='warning'>
                 שים/י לב: העגלה תפוג עוד {cartTimer}
               </Alert>
-              {
-                stages[stage].component
-              }
+              <Cart cart={cart} shippingMethods={shippingMethods} products={products} />
             </DrawerBody>
-            <DrawerFooter justifyContent='stretch'>
-              {
-                stage > 0 &&
-                <Fade in={true}>
-                  <Button
-                    borderRadius='xl'
-                    alignSelf='end'
-                    dir='rtl'
-                    colorScheme='brand'
-                    size='lg'
-                    variant='outline'
-                    onClick={() => setStage((prev) => prev - 1)}
-                  >
-                    {`חזור ל${stages[stage - 1].name}`}
-                  </Button>
-                </Fade>
-              }
-              <Spacer />
-              {
-                stages.length > stage + 1 &&
+            <DrawerFooter>
+              <Fade in={!isInCheckoutRoute}>
                 <Button
                   borderRadius='xl'
-                  alignSelf='start'
-                  dir='rtl'
+                  alignSelf='end'
                   colorScheme='brand'
                   size='lg'
-                  disabled={!stages[stage + 1].allowed()}
-                  onClick={() => setStage((prev) => prev + 1)}
+                  isFullWidth
+                  onClick={() => setRedirect('/checkout')}
                 >
-                  המשך
+                  המשך לתשלום
                 </Button>
-              }
+              </Fade>
             </DrawerFooter>
           </>
         }

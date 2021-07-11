@@ -4,7 +4,7 @@ import { useDebounce } from 'use-debounce'
 
 import {
   VStack, Heading, FormControl, FormLabel, Input,
-  Text, FormHelperText, InputLeftElement,
+  Text, FormHelperText, InputLeftElement, Stack,
   InputGroup, Spinner, FormErrorMessage, Box, Switch,
   Alert, AlertIcon, AlertTitle
 } from '@chakra-ui/react'
@@ -177,42 +177,48 @@ const Address = ({ customerDetails, setIsValid }) => {
   return (
     <VStack py='5' align='stretch' dir='rtl'>
       <Heading mb='2'>פרטי משלוח</Heading>
-      <Text>
-        {consts('delivery_address_note')}
-      </Text>
-      <AddressInput
-        defaultValue={address}
-        onChange={setAddress}
-      />
-      <FormControl display="flex" alignItems="center" >
-        <FormLabel htmlFor="privateHouse" mb="0">
-          בית פרטי
-        </FormLabel>
-        <Switch id="privateHouse" isChecked={isPrivateHouse} onChange={onChangeIsPrivateHouse} />
-      </FormControl>
-      {
-        !isPrivateHouse &&
-        <HouseNumberInput
-          defaultValue={houseNumber}
-          onChange={setHouseNumber}
-        />
-      }
-      {
-        isError &&
-        <Alert status='error'>
-          <AlertIcon />
-          <AlertTitle>אירעה שגיאה בעדכון כתובת המשלוח</AlertTitle>
-        </Alert>}
-      {
-        isValid && !isError &&
-        <Box p='8' mt='50px' backgroundColor='gray.100' fontSize='20px'>
-          ההזמנה תישלח
-          <br />
-          {`לרחוב ${address}`}
-          <br />
-          {!isPrivateHouse && `דירה מספר ${houseNumber} `}
+      <Stack direction={{ base: 'column', md: 'row' }} spacing='8'>
+        <VStack flex='1'>
+          <Text alignSelf='start'>
+            {consts('delivery_address_note')}
+          </Text>
+          <AddressInput
+            defaultValue={address}
+            onChange={setAddress}
+          />
+          <FormControl display="flex" alignItems="center" >
+            <FormLabel htmlFor="privateHouse" mb="0">
+              בית פרטי
+            </FormLabel>
+            <Switch id="privateHouse" isChecked={isPrivateHouse} onChange={onChangeIsPrivateHouse} />
+          </FormControl>
+          {
+            !isPrivateHouse &&
+            <HouseNumberInput
+              defaultValue={houseNumber}
+              onChange={setHouseNumber}
+            />
+          }
+        </VStack>
+        <Box flex='1'>
+          {
+            isError &&
+            <Alert status='error'>
+              <AlertIcon />
+              <AlertTitle>אירעה שגיאה בעדכון כתובת המשלוח</AlertTitle>
+            </Alert>}
+          {
+            isValid && !isError &&
+            <Box p='8' backgroundColor='gray.100' fontSize='20px'>
+              ההזמנה תישלח
+              <br />
+              {`לרחוב ${address}`}
+              <br />
+              {!isPrivateHouse && `דירה מספר ${houseNumber} `}
+            </Box>
+          }
         </Box>
-      }
+      </Stack>
     </VStack >
   )
 }

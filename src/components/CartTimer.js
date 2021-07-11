@@ -8,8 +8,10 @@ export const useCartTimer = (onExpire) => {
   const { seconds, minutes, restart } = useTimer({ expiryTimestamp: new Date(), autoStart: true, onExpire })
 
   useEffect(() => {
-    const expireDate = new Date(cart?.expiresAt)
-    restart(expireDate)
+    if (cart?.expiresAt) {
+      const expireDate = new Date(cart.expiresAt)
+      restart(expireDate)
+    }
   }, [cart?.expiresAt])
 
   const filledMinutes = minutes < 10 ? `0${minutes}` : minutes

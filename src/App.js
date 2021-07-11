@@ -14,8 +14,9 @@ import Admin from './components/Admin/Admin'
 import Navbar from './components/Navbar'
 import Products from './components/Products'
 import ProductPage from './components/ProductPage'
-import PrivateRoute from './components/Admin/PrivateRoute'
 import CheckoutDrawer from './components/Cart/Drawer'
+import PrivateRoute from './components/Admin/PrivateRoute'
+import CheckoutStepper from './components/Checkout/CheckoutStepper'
 import theme from './theme'
 
 function App() {
@@ -29,6 +30,9 @@ function App() {
               <Switch>
                 <Route path='/login'>
                   <Login />
+                </Route>
+                <Route path='/checkout'>
+                  <CheckoutStepper />
                 </Route>
                 <PrivateRoute path='/admin'>
                   <Admin />
