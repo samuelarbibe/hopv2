@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import {
   VStack, Stack,
   Text, Accordion, AccordionItem, AccordionButton,
-  AccordionPanel, RadioGroup, Radio, Box, Heading,
+  AccordionPanel, RadioGroup, Radio, Box, Heading, Fade,
 } from '@chakra-ui/react'
 
 import { setShippingMethod } from '../../utils/cart'
@@ -106,19 +106,21 @@ const Shipping = ({ cart, products, shippingMethods }) => {
         <Box flex='1'>
           {
             selectedShippingMethod &&
-            <Box p='8' w='100%' backgroundColor='gray.100' fontSize='20px'>
-              {`ההזמנה ${selectedShippingMethod.type === 'pickup' ? 'תחכה לאיסוף' : 'תישלח לביתך'}`}
-              <br />
-              {
-                ` ב${new Date(selectedShippingMethod.from).toLocaleString('he-IL', { weekday: 'long' })}` +
-                ` ${new Date(selectedShippingMethod.from).toLocaleDateString('he-IL')}`
-              }
-              <br />
-              {
-                ` בין השעות ${new Date(selectedShippingMethod.from).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}` +
-                ` ל- ${new Date(selectedShippingMethod.to).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })} `
-              }
-            </Box>
+            <Fade in>
+              <Box p='8' w='100%' backgroundColor='gray.100' fontSize='20px'>
+                {`ההזמנה ${selectedShippingMethod.type === 'pickup' ? 'תחכה לאיסוף' : 'תישלח לביתך'}`}
+                <br />
+                {
+                  ` ב${new Date(selectedShippingMethod.from).toLocaleString('he-IL', { weekday: 'long' })}` +
+                  ` ${new Date(selectedShippingMethod.from).toLocaleDateString('he-IL')}`
+                }
+                <br />
+                {
+                  ` בין השעות ${new Date(selectedShippingMethod.from).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}` +
+                  ` ל- ${new Date(selectedShippingMethod.to).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })} `
+                }
+              </Box>
+            </Fade>
           }
         </Box>
       </Stack>

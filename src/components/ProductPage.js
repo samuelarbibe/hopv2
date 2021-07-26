@@ -11,8 +11,10 @@ import {
   Center, Flex, Heading, Text, VStack, Stack, Box, Spacer
 } from '@chakra-ui/react'
 import { MinusIcon, AddIcon } from '@chakra-ui/icons'
-import ProductImages from './ProductImages'
 import { useConsts } from '../hooks/useConsts'
+
+import ProductImages from './ProductImages'
+import BottomNavbarHoc from './BottomNavbarHoc'
 
 const ProductPage = () => {
   const { id } = useParams()
@@ -29,7 +31,7 @@ const ProductPage = () => {
   const { data: cart, isErrorCart } = useSWR('/api/cart')
 
   const open = !!product
-  const trail = useTrail(4, {
+  const trail = useTrail(3, {
     config: { mass: 5, tension: 2000, friction: 200 },
     opacity: open ? 1 : 0,
     x: open ? 0 : 20,
@@ -77,7 +79,7 @@ const ProductPage = () => {
   }
 
   return (
-    <VStack py='5' pb='10'>
+    <VStack py='5' pb='4'>
       <Stack direction={{ base: 'column', md: 'row' }} spacing='8'>
         <Box flex={1}>
           <ProductImages imageUrls={product.images} />
@@ -122,7 +124,7 @@ const ProductPage = () => {
                 <Text size='large' fontSize='lg' fontWeight='bold'>{product.price * tempAmount || product.price} ₪</Text>
               </HStack>
             </animated.div>
-            <animated.div style={trail[3]}>
+            <BottomNavbarHoc>
               <Button
                 dir='rtl'
                 isLoading={isLoading}
@@ -136,7 +138,7 @@ const ProductPage = () => {
               >
                 {amountInCart ? 'עדכן עגלה' : 'הוסף לעגלה'}
               </Button>
-            </animated.div >
+            </BottomNavbarHoc>
           </VStack>
         </Flex>
       </Stack >

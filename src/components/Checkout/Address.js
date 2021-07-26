@@ -6,7 +6,7 @@ import {
   VStack, Heading, FormControl, FormLabel, Input,
   Text, FormHelperText, InputLeftElement, Stack,
   InputGroup, Spinner, FormErrorMessage, Box, Switch,
-  Alert, AlertIcon, AlertTitle
+  Alert, AlertIcon, AlertTitle, Fade
 } from '@chakra-ui/react'
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
 import { setCustomerAddress } from '../../utils/cart'
@@ -206,16 +206,19 @@ const Address = ({ customerDetails, setIsValid }) => {
             <Alert status='error'>
               <AlertIcon />
               <AlertTitle>אירעה שגיאה בעדכון כתובת המשלוח</AlertTitle>
-            </Alert>}
+            </Alert>
+          }
           {
             isValid && !isError &&
-            <Box p='8' backgroundColor='gray.100' fontSize='20px'>
-              ההזמנה תישלח
-              <br />
-              {`לרחוב ${address}`}
-              <br />
-              {!isPrivateHouse && `דירה מספר ${houseNumber} `}
-            </Box>
+            <Fade in>
+              <Box p='8' backgroundColor='gray.100' fontSize='20px'>
+                ההזמנה תישלח
+                <br />
+                {`לרחוב ${address}`}
+                <br />
+                {!isPrivateHouse && `דירה מספר ${houseNumber} `}
+              </Box>
+            </Fade>
           }
         </Box>
       </Stack>

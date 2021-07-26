@@ -11,6 +11,7 @@ import {
 import { useCartTimer } from '../CartTimer'
 import Address from './Address'
 import Shipping from './Shipping'
+import BottomNavbarHoc from '../BottomNavbarHoc'
 
 const CheckoutStepper = () => {
   const [stage, setStage] = useState(0)
@@ -67,44 +68,46 @@ const CheckoutStepper = () => {
   )
 
   return (
-    <VStack width='100%' justifyContent='stretch' alignItems='stretch' pb='5'>
+    <VStack width='100%' justifyContent='stretch' alignItems='stretch' pb='4'>
       <Alert dir='rtl' status='warning'>
         שים/י לב: העגלה תפוג עוד {cartTimer}
       </Alert>
       {
         stages[stage].component
       }
-      <HStack justifyContent='stretch'>
-        {
-          stage > 0 &&
-          <Fade in={true}>
+      <BottomNavbarHoc>
+        <HStack justifyContent='stretch'>
+          {
+            stage > 0 &&
+            <Fade in={true}>
+              <Button
+                alignSelf='end'
+                dir='rtl'
+                colorScheme='brand'
+                size='lg'
+                variant='outline'
+                onClick={() => setStage((prev) => prev - 1)}
+              >
+                {`חזור ל${stages[stage - 1].name}`}
+              </Button>
+            </Fade>
+          }
+          <Spacer />
+          {
+            stages.length > stage + 1 &&
             <Button
-              alignSelf='end'
+              alignSelf='start'
               dir='rtl'
               colorScheme='brand'
               size='lg'
-              variant='outline'
-              onClick={() => setStage((prev) => prev - 1)}
+              disabled={!stages[stage + 1].allowed()}
+              onClick={() => setStage((prev) => prev + 1)}
             >
-              {`חזור ל${stages[stage - 1].name}`}
+              המשך
             </Button>
-          </Fade>
-        }
-        <Spacer />
-        {
-          stages.length > stage + 1 &&
-          <Button
-            alignSelf='start'
-            dir='rtl'
-            colorScheme='brand'
-            size='lg'
-            disabled={!stages[stage + 1].allowed()}
-            onClick={() => setStage((prev) => prev + 1)}
-          >
-            המשך
-          </Button>
-        }
-      </HStack>
+          }
+        </HStack>
+      </BottomNavbarHoc>
     </VStack>
   )
 }
