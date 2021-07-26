@@ -103,7 +103,6 @@ const ProductPage = () => {
                         <IconButton
                           backgroundColor='gray.50'
                           _disabled={{ color: 'gray.300', opacity: 1 }}
-                          borderRadius='xl'
                           disabled={isLoading || amountDiff >= product.tempStock || tempAmount === +consts('max_product_amount')}
                           icon={<AddIcon height='13px' />}
                           onClick={() => handleClick('add')} />
@@ -113,7 +112,6 @@ const ProductPage = () => {
                         <IconButton
                           backgroundColor='gray.50'
                           _disabled={{ color: 'gray.300', opacity: 1 }}
-                          borderRadius='xl'
                           disabled={isLoading || tempAmount === 0}
                           icon={<MinusIcon height='12px' />}
                           onClick={() => handleClick('sub')} />
@@ -132,7 +130,6 @@ const ProductPage = () => {
                 disabled={(tempAmount === 0 && amountInCart === 0) || tempAmount === amountInCart}
                 colorScheme='brand'
                 size='lg'
-                borderRadius='2xl'
                 height='60px'
                 isFullWidth
                 onClick={() => handleClick('save')}

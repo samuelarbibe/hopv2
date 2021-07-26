@@ -57,7 +57,7 @@ const ImageCard = ({ imageUrl, index, moveCard, onDelete }) => {
   return (
     <HStack ref={ref} opacity={isDragging ? 0.5 : 1} data-handler-id={handlerId} rounded='md' border='1px' borderColor='gray.400' p='3'>
       <DragHandleIcon />
-      <Image src={imageUrl} height='100px' />
+      <Image alt={imageUrl} src={imageUrl} height='100px' />
       <Spacer />
       <IconButton onClick={onDelete} size='sm' variant='ghost' icon={<CloseIcon color='tomato' />} />
     </HStack>

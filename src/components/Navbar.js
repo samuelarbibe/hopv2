@@ -30,7 +30,7 @@ const Navbar = () => {
       <Container maxWidth='container.lg' px='0' {...bindLongPress}>
         <Flex p='3' background='white' justifyContent='space-between'>
           <Box onClick={() => history.push('')} textAlign='center'>
-            <Image height={{ base: '40px' }} src={`${process.env.PUBLIC_URL}/hop_logo.png`} />
+            <Image alt='hop tlv' height={{ base: '40px' }} src={`${process.env.PUBLIC_URL}/hop_logo.png`} />
           </Box>
           {
             adminMode
@@ -52,7 +52,7 @@ const Navbar = () => {
                 </Menu>
               )
               : (
-                < IconButton
+                <IconButton
                   colorScheme='brand'
                   variant='ghost'
                   onClick={onOpenCart}

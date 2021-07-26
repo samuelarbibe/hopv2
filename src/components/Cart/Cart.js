@@ -35,7 +35,7 @@ const Cart = ({ cart, products, shippingMethods }) => {
               return (
                 <Tr key={index} onClick={() => history.push(`/product/${item._id}`)}>
                   <Td p='1' width={{ base: '100px', md: '150px' }}>
-                    <Image src={item.images[0]} height={{ base: '100px', md: '150px' }} />
+                    <Image alt={item.name} src={item.images[0]} height={{ base: '100px', md: '150px' }} />
                   </Td>
                   <Td p='1'>
                     <Text fontSize='md' >

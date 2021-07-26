@@ -79,7 +79,6 @@ const CheckoutStepper = () => {
           stage > 0 &&
           <Fade in={true}>
             <Button
-              borderRadius='xl'
               alignSelf='end'
               dir='rtl'
               colorScheme='brand'
@@ -95,7 +94,6 @@ const CheckoutStepper = () => {
         {
           stages.length > stage + 1 &&
           <Button
-            borderRadius='xl'
             alignSelf='start'
             dir='rtl'
             colorScheme='brand'

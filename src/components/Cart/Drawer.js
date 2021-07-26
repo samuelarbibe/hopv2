@@ -75,7 +75,6 @@ const CheckoutDrawer = () => {
             <DrawerFooter>
               <Fade in={!isInCheckoutRoute}>
                 <Button
-                  borderRadius='xl'
                   alignSelf='end'
                   colorScheme='brand'
                   size='lg'

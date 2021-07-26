@@ -44,7 +44,7 @@ const Products = () => {
               <animated.div key={index} style={trail[index]}>
                 <Box onClick={() => history.push(`/product/${product._id}`)} >
                   <Box height='400px'>
-                    <Image height='100%' width='100%' src={product.images[0]} fit='cover' />
+                    <Image alt={product.name} height='100%' width='100%' src={product.images[0]} fit='cover' />
                   </Box>
                   <Flex height='110px' direction='column' mt='7'>
                     <Heading mb='2' size='md'>{product.name}</Heading>
