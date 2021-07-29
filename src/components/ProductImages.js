@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box } from '@chakra-ui/react'
 import { Carousel } from 'react-responsive-carousel'
 import { GoPrimitiveDot } from 'react-icons/go'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import { clearAllBodyScrollLocks, disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 const Indicator = ({ isSelected, onClick }) => {
   return (
@@ -20,7 +21,11 @@ const Indicator = ({ isSelected, onClick }) => {
 const ProductImages = ({ imageUrls, ...args }) => {
   const [currIndex, setCurrIndex] = useState(0)
 
-  if (!imageUrls.length) return null
+  useEffect(() => {
+    return () => {
+      clearAllBodyScrollLocks()
+    }
+  }, [])
 
   return (
     <Carousel
@@ -34,6 +39,8 @@ const ProductImages = ({ imageUrls, ...args }) => {
       }
       emulateTouch
       infiniteLoop
+      onSwipeStart={() => disableBodyScroll()}
+      onSwipeEnd={() => enableBodyScroll()}
       {...args}
     >
       {
@@ -45,7 +52,7 @@ const ProductImages = ({ imageUrls, ...args }) => {
           )
         })
       }
-    </Carousel>
+    </Carousel >
   )
 }
 
