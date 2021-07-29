@@ -79,9 +79,9 @@ const ProductPage = () => {
   }
 
   return (
-    <VStack py='5' pb='4'>
-      <Stack direction={{ base: 'column', md: 'row' }} spacing='8'>
-        <Box flex={1}>
+    <VStack py='5' pb='4' alignItems='stretch'>
+      <Stack direction={{ base: 'column', md: 'row' }} spacing={{ base: '0', md: '8' }}>
+        <Box flex={1} overflowX='hidden' mx='-4'>
           <ProductImages imageUrls={product.images} />
         </Box>
         <Flex direction='column' flex={1}>

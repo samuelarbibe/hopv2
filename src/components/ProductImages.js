@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { Box } from '@chakra-ui/react'
+import React, { useMemo, useState } from 'react'
+
+import { Box, useMediaQuery } from '@chakra-ui/react'
 import { Carousel } from 'react-responsive-carousel'
+import ZoomSlider from 'react-instagram-zoom-slider'
 import { GoPrimitiveDot } from 'react-icons/go'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
-import { clearAllBodyScrollLocks, disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 const Indicator = ({ isSelected, onClick }) => {
   return (
@@ -20,39 +21,37 @@ const Indicator = ({ isSelected, onClick }) => {
 
 const ProductImages = ({ imageUrls, ...args }) => {
   const [currIndex, setCurrIndex] = useState(0)
+  const [isLowerThenMd] = useMediaQuery('(max-width: 48em)')
 
-  useEffect(() => {
-    return () => {
-      clearAllBodyScrollLocks()
-    }
-  }, [])
+  const images = useMemo(() => imageUrls.map((imageUrl, index) => {
+    return (
+      <img draggable='false' key={index} src={imageUrl} alt={`product-${index}`} />
+    )
+  }), [imageUrls])
 
   return (
-    <Carousel
-      showArrows={false}
-      showStatus={false}
-      showThumbs={false}
-      selectedItem={currIndex}
-      onChange={(newIndex) => setCurrIndex(newIndex)}
-      renderIndicator={(_, isSelected, index) =>
-        <Indicator isSelected={isSelected} onClick={() => setCurrIndex(index)} />
-      }
-      emulateTouch
-      infiniteLoop
-      onSwipeStart={() => disableBodyScroll()}
-      onSwipeEnd={() => enableBodyScroll()}
-      {...args}
-    >
-      {
-        imageUrls.map((imageUrl, index) => {
-          return (
-            <div key={index}>
-              <img src={imageUrl} alt={`product-${index}`} />
-            </div>
-          )
-        })
-      }
-    </Carousel >
+    isLowerThenMd
+      ? (
+        <ZoomSlider slides={images} />
+      )
+      : (
+        <Carousel
+          showArrows={false}
+          showStatus={false}
+          showThumbs={false}
+          selectedItem={currIndex}
+          onChange={(newIndex) => setCurrIndex(newIndex)}
+          renderIndicator={
+            (_, isSelected, index) =>
+              <Indicator isSelected={isSelected} onClick={() => setCurrIndex(index)} />
+          }
+          emulateTouch
+          infiniteLoop
+          {...args}
+        >
+          {images}
+        </Carousel >
+      )
   )
 }
 
