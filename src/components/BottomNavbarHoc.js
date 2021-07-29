@@ -13,7 +13,8 @@ const BottomNavbarHoc = ({ children }) => {
         {children}
       </Box>
       {
-        <Fade in={!isVisible} >
+        !isVisible &&
+        <Fade in={!isVisible}>
           <Center position='fixed' bottom='0' left='0' width='100%' borderTopWidth='1px' zIndex='999' p='4' bg='white'>
             <Container maxWidth='container.lg' px='0'>
               {children}

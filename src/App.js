@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TouchBackend } from 'react-dnd-touch-backend'
-import { ChakraProvider, Container } from '@chakra-ui/react'
+import { ChakraProvider, Container, HStack, Link, Text } from '@chakra-ui/react'
 import { isMobile } from 'react-device-detect'
 
 import { CartProvider } from './hooks/useCart'
@@ -18,6 +18,7 @@ import CheckoutDrawer from './components/Cart/Drawer'
 import PrivateRoute from './components/Admin/PrivateRoute'
 import CheckoutStepper from './components/Checkout/CheckoutStepper'
 import theme from './theme'
+import { AiOutlineInstagram } from 'react-icons/ai'
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
         <AuthProvider>
           <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
             <Navbar />
-            <Container maxWidth='container.lg' height='100%' pt='64px'>
+            <Container maxWidth='container.lg' py='64px' position='relative'>
               <Switch>
                 <Route path='/login'>
                   <Login />
@@ -44,12 +45,17 @@ function App() {
                   <Products />
                 </Route>
               </Switch>
+              <HStack w='100%' position='absolute' bottom='0' left='0' p='5' pt='10' justifyContent='space-between' >
+                <Link href='https://api.whatsapp.com/send?phone=972546323734' target='_blank' fontWeight='light'>צור קשר</Link>
+                <Text fontSize='12' fontWeight='thin' pr='10'>© HoP 2021</Text>
+                <Link href='https://www.instagram.com/hoptlv/' target='_blank'><AiOutlineInstagram /></Link>
+              </HStack>
             </Container>
             <CheckoutDrawer />
           </DndProvider>
         </AuthProvider>
       </CartProvider>
-    </ChakraProvider>
+    </ChakraProvider >
   )
 }
 
