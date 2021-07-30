@@ -12,16 +12,13 @@ const BottomNavbarHoc = ({ children }) => {
       <Box ref={ref} visibility={isVisible ? 'visible' : 'hidden'}>
         {children}
       </Box>
-      {
-        !isVisible &&
-        <Fade in={!isVisible}>
-          <Center position='fixed' bottom='0' left='0' width='100%' borderTopWidth='1px' zIndex='999' p='4' bg='white'>
-            <Container maxWidth='container.lg' px='0'>
-              {children}
-            </Container>
-          </Center>
-        </Fade>
-      }
+      <Fade in={!isVisible}>
+        <Center position='fixed' bottom='0' left='0' width='100%' borderTopWidth='1px' zIndex='999' p='4' bg='white'>
+          <Container maxWidth='container.lg' px='0'>
+            {children}
+          </Container>
+        </Center>
+      </Fade>
     </>
   )
 }

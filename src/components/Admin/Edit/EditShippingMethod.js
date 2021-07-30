@@ -68,7 +68,7 @@ const EditShippingMethod = () => {
   )
 
   if ((!shippingMethod && !isNew) || !tempShippingMethod) return (
-    <Center justifySelf='center' height='100%'>
+    <Center justifySelf='center' height='md'>
       <Spinner size='lg' />
     </Center>
   )
@@ -201,15 +201,24 @@ const EditShippingMethod = () => {
   }
 
   const canSave = (
-    isNew
-      ? JSON.stringify(tempShippingMethod) !== JSON.stringify(defaultShippingMethod)
-      : JSON.stringify(tempShippingMethod) !== JSON.stringify(shippingMethod)
+    (
+      isNew
+        ? JSON.stringify(tempShippingMethod) !== JSON.stringify(defaultShippingMethod)
+        : JSON.stringify(tempShippingMethod) !== JSON.stringify(shippingMethod)
+    ) &&
+    tempShippingMethod.name &&
+    tempShippingMethod.description &&
+    tempShippingMethod.type &&
+    (
+      tempShippingMethod.type === 'pickup' ||
+      tempShippingMethod.area
+    )
   )
 
   return (
     <VStack pt='10' spacing='5' align='stretch' dir='rtl' pb='10'>
       <HStack w='100%'>
-        <Heading size='md' alignSelf='end' >עריכת משלוח</Heading>
+        <Heading size='md' alignSelf='end'>עריכת משלוח</Heading>
         <Spacer />
         {
           !isNew &&

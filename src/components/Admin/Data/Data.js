@@ -21,7 +21,7 @@ const Data = () => {
   )
 
   if (!shippingMethods || !products) return (
-    <Center justifySelf='center' height='100%'>
+    <Center justifySelf='center' height='md'>
       <Spinner size='lg' />
     </Center>
   )

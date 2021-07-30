@@ -37,13 +37,13 @@ const CheckoutDrawer = () => {
     )
 
     if (!products || !cart || !cartTimer || !shippingMethods) return (
-      <Center justifySelf='center' height='100%'>
+      <Center justifySelf='center' height='md'>
         <Spinner size='lg' />
       </Center>
     )
 
     if (cart.items.length === 0) return (
-      <Center justifySelf='center' height='100%'>
+      <Center justifySelf='center' height='md'>
         <Text fontSize='xl'>העגלה ריקה</Text>
       </Center>
     )

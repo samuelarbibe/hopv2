@@ -16,7 +16,7 @@ import ShippingMethodsTable from './Data/ShippingMethodsTable'
 const ShippingMethods = () => {
   const history = useHistory()
   const { url } = useRouteMatch()
-  const { data: shippingMethods, isError } = useSWR('/api/shippingMethods', { refreshInterval: 5000 })
+  const { data: shippingMethods, isError } = useSWR('/api/shippingMethods/all', { refreshInterval: 5000 })
 
   const [filters, setFilters] = useState({
     inStockOnly: {
@@ -46,7 +46,7 @@ const ShippingMethods = () => {
   )
 
   if (!shippingMethods) return (
-    <Center justifySelf='center' height='100%'>
+    <Center justifySelf='center' height='md'>
       <Spinner size='lg' />
     </Center>
   )
