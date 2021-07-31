@@ -53,7 +53,6 @@ const Navbar = () => {
               )
               : (
                 <IconButton
-                  colorScheme='brand'
                   variant='ghost'
                   onClick={onOpenCart}
                   icon={<AiOutlineShopping size='1.6em' color='brand' />}

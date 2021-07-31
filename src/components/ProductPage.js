@@ -8,17 +8,21 @@ import { updateCart } from '../utils/cart'
 import {
   Spinner, Alert, HStack, Tag,
   AlertIcon, AlertTitle, Button, ButtonGroup, IconButton,
-  Center, Flex, Heading, Text, VStack, Stack, Box, Spacer
+  Center, Flex, Heading, Text, VStack, Stack, Box, Spacer, useToast
 } from '@chakra-ui/react'
 import { MinusIcon, AddIcon } from '@chakra-ui/icons'
 import { useConsts } from '../hooks/useConsts'
 
 import ProductImages from './ProductImages'
 import BottomNavbarHoc from './BottomNavbarHoc'
+import { useCart } from '../hooks/useCart'
 
 const ProductPage = () => {
+  const toast = useToast()
   const { id } = useParams()
   const { consts } = useConsts()
+  const { onOpen: openCart } = useCart()
+
   const { data: loadedProducts } = useSWR('/api/products', {
     revalidateOnMount: false,
     revalidateOnFocus: false,
@@ -60,7 +64,7 @@ const ProductPage = () => {
     </Center>
   )
 
-  const handleClick = async (actionType) => {
+  const handleClickAmount = (actionType) => async () => {
     switch (actionType) {
       case 'add':
         setTempAmount((prev) => prev + 1)
@@ -68,14 +72,24 @@ const ProductPage = () => {
       case 'sub':
         setTempAmount((prev) => prev - 1)
         break
-      case 'save':
-        setIsLoading(true)
-        await updateCart(id, amountDiff)
-        setIsLoading(false)
-        break
-      default:
-        break
+    }1
+  }
+
+  const handleClickSave = async () => {
+    setIsLoading(true)
+    const success = await updateCart(id, amountDiff)
+    if (success) {
+      openCart()
+    } else {
+      toast({
+        title: 'אירעה שגיאה בעדכון העגלה',
+        status: 'error',
+        variant: 'subtle',
+        duration: 3000,
+        isClosable: true,
+      })
     }
+    setIsLoading(false)
   }
 
   return (
@@ -107,7 +121,7 @@ const ProductPage = () => {
                           _disabled={{ color: 'gray.300', opacity: 1 }}
                           disabled={isLoading || amountDiff >= product.tempStock || tempAmount === +consts('max_product_amount')}
                           icon={<AddIcon height='13px' />}
-                          onClick={() => handleClick('add')} />
+                          onClick={handleClickAmount('add')} />
                         <Box width='10' backgroundColor='gray.50' display='flex' alignItems='center' justifyContent='center'>
                           <Text textAlign='center' fontSize='lg' fontWeight='bold' >{tempAmount}</Text>
                         </Box>
@@ -116,7 +130,7 @@ const ProductPage = () => {
                           _disabled={{ color: 'gray.300', opacity: 1 }}
                           disabled={isLoading || tempAmount === 0}
                           icon={<MinusIcon height='12px' />}
-                          onClick={() => handleClick('sub')} />
+                          onClick={handleClickAmount('sub')} />
                       </ButtonGroup>
                     )
                 }
@@ -134,7 +148,7 @@ const ProductPage = () => {
                 size='lg'
                 height='60px'
                 isFullWidth
-                onClick={() => handleClick('save')}
+                onClick={handleClickSave}
               >
                 {amountInCart ? 'עדכן עגלה' : 'הוסף לעגלה'}
               </Button>

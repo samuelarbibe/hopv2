@@ -17,10 +17,10 @@ const CheckoutStepper = () => {
   const [stage, setStage] = useState(0)
   const [isCurrentStageValid, setIsCurrentStageValid] = useState(false)
 
-  const { data: cart, isError: isCartError } = useSWR('/api/cart', { refreshInterval: 5000 })
-  const { data: products, isError: isProductsError } = useSWR('/api/products')
-  const { data: shippingMethods, isError: isShippingMethodsError } = useSWR('/api/shippingMethods', { refreshInterval: 5000 })
   const { data: cartTimer, isError: isCartTimerError } = useCartTimer()
+  const { data: products, isError: isProductsError } = useSWR('/api/products')
+  const { data: cart, isError: isCartError } = useSWR('/api/cart', { refreshInterval: 5000 })
+  const { data: shippingMethods, isError: isShippingMethodsError } = useSWR('/api/shippingMethods', { refreshInterval: 5000 })
 
   const isSelectedShippingDelivery = useMemo(() => shippingMethods?.find((method) => method._id === cart?.shippingMethod)?.type === 'delivery', [shippingMethods, cart])
 
@@ -69,7 +69,7 @@ const CheckoutStepper = () => {
 
   return (
     <VStack width='100%' justifyContent='stretch' alignItems='stretch' pb='4'>
-      <Alert dir='rtl' status='warning'>
+      <Alert dir='rtl' status='warning' position='sticky' top='64px' py='1' mx='-4' w='calc(100% + 8)' borderBottomWidth='1px' zIndex='999'>
         שים/י לב: העגלה תפוג עוד {cartTimer}
       </Alert>
       {

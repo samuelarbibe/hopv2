@@ -37,9 +37,11 @@ export const updateCart = async (productId, amount) => {
     const { data: updatedCart } = await updateCartPormise()
     mutate('/api/cart', updatedCart, false)
     mutate(`/api/products/${productId}`)
+    return true
   } catch (err) {
     console.log('Error!!!')
     mutate('/api/cart')
+    return false
   }
 }
 
