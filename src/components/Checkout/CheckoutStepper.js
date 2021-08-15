@@ -9,8 +9,10 @@ import {
 } from '@chakra-ui/react'
 
 import { useCartTimer } from '../CartTimer'
+import Payment from './Payment'
 import Address from './Address'
 import Shipping from './Shipping'
+import CustomerDetails from './CustomerDetails'
 import BottomNavbarHoc from '../BottomNavbarHoc'
 
 const CheckoutStepper = () => {
@@ -34,18 +36,19 @@ const CheckoutStepper = () => {
       ...(isSelectedShippingDelivery ? [
         {
           name: 'פרטי משלוח',
-          component: <Address customerDetails={cart.customerDetails} setIsValid={setIsCurrentStageValid} />,
+          component: <Address customerDetails={cart?.customerDetails} setIsValid={setIsCurrentStageValid} />,
           allowed: () => cart.shippingMethod
         },
       ] : []),
       {
+        name: 'פרטים עליכם',
+        component: <CustomerDetails customerDetails={cart?.customerDetails} setIsValid={setIsCurrentStageValid} />,
+        allowed: () => cart.shippingMethod
+      },
+      {
         name: 'תשלום',
-        component: <Spacer />,
-        allowed: () => {
-          return isSelectedShippingDelivery
-            ? isCurrentStageValid
-            : cart.shippingMethod
-        }
+        component: <Payment />,
+        allowed: () => isCurrentStageValid && (!isSelectedShippingDelivery || cart?.shippingMethod)
       },
     ]
   }, [cart, shippingMethods, products, isSelectedShippingDelivery, isCurrentStageValid])
@@ -78,7 +81,7 @@ const CheckoutStepper = () => {
       <BottomNavbarHoc>
         <HStack justifyContent='stretch'>
           {
-            stage > 0 &&
+            stage > 0 && stage < stages.length - 1 &&
             <Fade in={true}>
               <Button
                 alignSelf='end'

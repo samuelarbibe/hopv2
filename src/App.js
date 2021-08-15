@@ -16,6 +16,7 @@ import Navbar from './components/Navbar'
 import Admin from './components/Admin/Admin'
 import Login from './components/Admin/Login'
 import Products from './components/Products'
+import ThankYou from './components/ThankYou'
 import ProductPage from './components/ProductPage'
 import CheckoutDrawer from './components/Cart/Drawer'
 import PrivateRoute from './components/Admin/PrivateRoute'
@@ -30,6 +31,9 @@ function App() {
             <Navbar />
             <Container maxWidth='container.lg' py='64px'>
               <Switch>
+                <Route path='/thankYou'>
+                  <ThankYou />
+                </Route>
                 <Route path='/login'>
                   <Login />
                 </Route>

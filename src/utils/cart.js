@@ -87,3 +87,20 @@ export const setCustomerAddress = async (address, houseNumber) => {
     return false
   }
 }
+
+export const setCustomerDetails = async (fullName, email, phoneNumber) => {
+  mutate('/api/cart', (cart) => {
+    const tempUpdatedCart = { ...cart, customerDetails: { ...cart?.customerDetails, fullName, email, phoneNumber } }
+    return tempUpdatedCart
+  }, false)
+
+  try {
+    const { data: updatedCart } = await axios.put('/api/cart/customerDetails', { fullName, email, phoneNumber })
+    mutate('/api/cart', updatedCart, false)
+    return true
+  } catch (err) {
+    console.log('Error!!!')
+    mutate('/api/cart')
+    return false
+  }
+}
