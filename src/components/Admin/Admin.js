@@ -1,9 +1,12 @@
 import React from 'react'
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
-import Consts from './Consts'
+
 import Data from './Data/Data'
 import EditProduct from './Edit/EditProduct'
 import EditShippingMethod from './Edit/EditShippingMethod'
+
+import Consts from './Consts'
+import Orders from './Orders'
 import Products from './Products'
 import ShippingMethods from './ShippingMethods'
 
@@ -26,6 +29,9 @@ const Admin = () => {
       </Route>
       <Route path={`${path}/shippingMethods/edit/:id`}>
         <EditShippingMethod />
+      </Route>
+      <Route path={`${path}/orders`} exact>
+        <Orders />
       </Route>
       <Route path={`${path}/consts`} exact>
         <Consts />

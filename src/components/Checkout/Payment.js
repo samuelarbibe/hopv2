@@ -42,8 +42,8 @@ const Payment = () => {
     window.addEventListener('message', handleMessage)
 
     return () => {
-      if (!pageLoadingError && !isError && paymentStatus !== 'success') cancelOrder()
       window.removeEventListener('message', handleMessage)
+      if (!pageLoadingError && !isError && paymentStatus !== 'success') cancelOrder()
     }
   }, [])
 

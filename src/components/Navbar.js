@@ -42,6 +42,7 @@ const Navbar = () => {
                         {isOpen ? 'Close' : 'Open'}
                       </MenuButton>
                       <MenuList dir='rtl'>
+                        <MenuItem bgColor={pathname.includes('orders') ? 'gray.100' : 'white'} onClick={() => history.push('/admin/orders')}>הזמנות</MenuItem>
                         <MenuItem bgColor={pathname.includes('products') ? 'gray.100' : 'white'} onClick={() => history.push('/admin/products')}>מוצרים</MenuItem>
                         <MenuItem bgColor={pathname.includes('shippingMethods') ? 'gray.100' : 'white'} onClick={() => history.push('/admin/shippingMethods')}>משלוחים</MenuItem>
                         <MenuItem bgColor={pathname.includes('carts') ? 'gray.100' : 'white'} onClick={() => history.push('/admin/carts')}>עגלות</MenuItem>
