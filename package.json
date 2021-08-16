@@ -13,6 +13,7 @@
     "http-proxy-middleware": "^2.0.0",
     "immutability-helper": "^3.1.1",
     "mapbox-gl": "^2.3.1",
+    "query-string": "^7.0.1",
     "react": "^17.0.2",
     "react-datepicker": "^4.1.1",
     "react-device-detect": "^1.17.0",
