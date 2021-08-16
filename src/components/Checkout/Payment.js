@@ -11,8 +11,8 @@ import { cancelOrder } from '../../utils/orders'
 const Payment = () => {
   const { data: paymentProcess, isLoading, isError } = useSWR('/api/orders/createOrder', { revalidateOnFocus: false })
 
-  const [loadingError, setLoadingError] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [pageLoadingError, setPageLoadingError] = useState(false)
+  const [paymentStatus, setPaymentStatus] = useState()
 
   const handleMessage = async (result) => {
     if (result.origin === 'https://meshulam.co.il' || result.origin === 'https://sandbox.meshulam.co.il') {
@@ -23,13 +23,15 @@ const Payment = () => {
         }
         case 'payment': {
           if (result.data.status == 1) {
-            setSuccess(true)
+            setPaymentStatus('success')
+          } else {
+            setPaymentStatus('failure')
           }
           break
         }
         case 'failed_to_load_page': {
-          await cancelOrder()
-          setLoadingError(true)
+          const cancelled = await cancelOrder()
+          setPageLoadingError(cancelled)
           break
         }
       }
@@ -40,14 +42,14 @@ const Payment = () => {
     window.addEventListener('message', handleMessage)
 
     return () => {
-      if (!loadingError && !isError) cancelOrder()
+      if (!pageLoadingError && !isError && paymentStatus !== 'success') cancelOrder()
       window.removeEventListener('message', handleMessage)
     }
   }, [])
 
-  if (success) return <Redirect to='/thankYou' />
+  if (paymentStatus) return <Redirect to={`/thankYou?response=${paymentStatus}`} />
 
-  if (loadingError) return <Redirect to='/' />
+  if (pageLoadingError) return <Redirect to='/' />
 
   if (isError) return (
     <Alert status='error'>

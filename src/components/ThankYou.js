@@ -10,7 +10,7 @@ const ThankYou = () => {
   const { cField1: orderId, response } = queryString.parse(search)
 
   return (
-    !response || response === 'success'
+    response === 'success'
       ? (
         <Center dir='rtl' mt='36' borderRadius='md' bg='green.300' p='8' color='white' flexDir='column'>
           <Heading>תודה על הקנייה!</Heading>

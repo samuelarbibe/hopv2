@@ -5,7 +5,6 @@ export const cancelOrder = async () => {
     await axios.delete('/api/orders/cancelOrder')
     return true
   } catch (err) {
-    console.log('Error!!!')
     return false
   }
 }
