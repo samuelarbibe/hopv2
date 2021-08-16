@@ -49,11 +49,11 @@ const Address = ({ customerDetails, setIsValid }) => {
     if (value && !FULLNAME_REGEX.test(value)) return
 
     let error
-    if (value.split(/\s/g).length !== 2) {
+    if (value.trim().split(/\s/g).length !== 2) {
       error = ' יש לציין שם ושם משפחה (2 מילים)'
     }
     setErrors((prev) => ({ ...prev, fullName: error }))
-    setValues((prev) => ({ ...prev, fullName: value }))
+    setValues((prev) => ({ ...prev, fullName: error ? value : value.trim() }))
   }
 
   const handleChangeEmail = ({ target }) => {
@@ -91,12 +91,12 @@ const Address = ({ customerDetails, setIsValid }) => {
           </FormControl>
           <FormControl isInvalid={!!errors.email}>
             <FormLabel>כתובת אימייל</FormLabel>
-            <Input type='email' value={values.email} onChange={handleChangeEmail} placeholder='israel@gmail.com' />
+            <Input type='email' value={values.email} onChange={handleChangeEmail} placeholder='הכנס כתובת אימייל' />
             <FormErrorMessage>{errors.email}</FormErrorMessage>
           </FormControl>
           <FormControl isInvalid={!!errors.phoneNumber}>
             <FormLabel>מספר טלפון</FormLabel>
-            <Input type='text' value={values.phoneNumber} onChange={handleChangePhoneNumber} placeholder='0527587643' />
+            <Input type='text' value={values.phoneNumber} onChange={handleChangePhoneNumber} placeholder='הכנס מספר טלפון' />
             <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
           </FormControl>
         </Box>
