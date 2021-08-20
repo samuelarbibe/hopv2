@@ -2,8 +2,7 @@ import React from 'react'
 import useSWR from 'swr'
 
 import {
-  Heading, VStack, HStack,
-  Alert, AlertIcon, AlertTitle,
+  VStack, Alert, AlertIcon, AlertTitle,
   Center, Spinner, Box,
 } from '@chakra-ui/react'
 import OrdersTable from './Data/OrdersTable'
@@ -26,11 +25,8 @@ const Orders = () => {
   )
 
   return (
-    <VStack pt='10' spacing='5' dir='rtl'>
-      <HStack w='100%'>
-        <Heading size='md' alignSelf='start' >הזמנות</Heading>
-      </HStack>
-      <Box w='100vw' overflow='auto'>
+    <VStack spacing='5' dir='rtl'>
+      <Box dir='rtl' w='100vw' overflow='auto'>
         <OrdersTable orders={orders} />
       </Box>
     </VStack>
