@@ -49,7 +49,7 @@ const CheckoutDrawer = () => {
     )
 
     return null
-  }, [cart, cartTimer, isCartError, isCartTimerError, isProductsError, products])
+  }, [cart, cartTimer, isCartError, isCartTimerError, isProductsError, isShippingMethodsError, products, shippingMethods])
 
   if (redirect) return <Redirect to='/checkout' />
 

@@ -53,12 +53,12 @@ const EditShippingMethod = () => {
   const [freeAbove, setFreeAbove] = useState(false)
   const { data: shippingMethod, isError } = useSWR(() => id && !isNew ? `/api/shippingMethods/${id}` : null, { refreshInterval: 5000 })
 
-  useEffect(async () => {
+  useEffect(() => {
     if (shippingMethod?._id !== tempShippingMethod?._id) {
       setTempShippingMethod(shippingMethod)
       setFreeAbove(!!shippingMethod.freeAbove)
     }
-  }, [shippingMethod])
+  }, [shippingMethod, tempShippingMethod?._id])
 
   if (isError) return (
     <Alert status='error'>

@@ -73,7 +73,7 @@ const ImagesDnD = ({ imageUrls, onChange }) => {
         [hoverIndex, 0, dragCard],
       ],
     }))
-  }, [imageUrls])
+  }, [imageUrls, onChange])
 
   const handleDelete = (imageToDelete) => {
     onChange(imageUrls.filter((imageUrl) => imageUrl !== imageToDelete))

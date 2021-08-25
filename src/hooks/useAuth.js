@@ -1,4 +1,4 @@
-import React, { useContext, createContext, useState } from 'react'
+import React, { useContext, createContext, useState, useCallback } from 'react'
 import axios from 'axios'
 
 const AuthContext = createContext()
@@ -8,7 +8,7 @@ function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false)
   const [touched, setTouched] = useState(false)
 
-  const login = async (username, password) => {
+  const login = useCallback(async (username, password) => {
     setIsLoading(true)
     setTouched(true)
     try {
@@ -18,9 +18,9 @@ function AuthProvider({ children }) {
       setIsAuth(false)
     }
     setIsLoading(false)
-  }
+  }, [])
 
-  const checkIsAuth = async () => {
+  const checkIsAuth = useCallback(async () => {
     setIsLoading(true)
     try {
       const { data } = await axios.get('/api/users/login')
@@ -29,7 +29,7 @@ function AuthProvider({ children }) {
       setIsAuth(false)
     }
     setIsLoading(false)
-  }
+  }, [])
 
   const value = { isAuth, login, checkIsAuth, isLoading, touched }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import mapboxgl from 'mapbox-gl'
 import MapboxDraw from '@mapbox/mapbox-gl-draw'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -38,16 +38,16 @@ const ShippingMap = ({ initialArea, onChangeArea }) => {
     })
     map.current.addControl(draw.current, 'top-left')
     initialArea && draw.current.add(initialArea)
-  }, [])
+  }, [initialArea, lat, lng, zoom])
 
-  const onChange = () => {
+  const onChange = useCallback(() => {
     const featureCollection = draw.current.getAll()
     const multiPolygon = {
       type: 'MultiPolygon',
       coordinates: featureCollection.features.map((feature) => feature.geometry.coordinates)
     }
     onChangeArea(multiPolygon)
-  }
+  }, [onChangeArea])
 
   useEffect(() => {
     if (!map.current) return
@@ -61,7 +61,7 @@ const ShippingMap = ({ initialArea, onChangeArea }) => {
     map.current.on('draw.create', onChange)
     map.current.on('draw.delete', onChange)
     map.current.on('draw.update', onChange)
-  }, [])
+  }, [onChange])
 
   return (
     <Box h='100%' w='100%' ref={mapContainer} />

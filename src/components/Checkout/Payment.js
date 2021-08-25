@@ -51,6 +51,8 @@ const Payment = () => {
     }
   }, [])
 
+  if (paymentStatus) return <Redirect to={`/thankYou?response=${paymentStatus}`} />
+
   if (pageLoadingError) return <Redirect to='/' />
 
   if (isError) return (

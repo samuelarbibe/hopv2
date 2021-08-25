@@ -9,10 +9,11 @@ const PrivateRoute = ({ children, ...rest }) => {
   const { isAuth, checkIsAuth } = useAuth()
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(async () => {
-    await checkIsAuth()
-    setIsLoading(false)
-  }, [])
+  useEffect(() => {
+    checkIsAuth().then(() => {
+      setIsLoading(false)
+    })
+  }, [checkIsAuth])
 
   if (isLoading) return (
     <Center justifySelf='center' height='md'>

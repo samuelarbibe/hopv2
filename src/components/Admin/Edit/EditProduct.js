@@ -36,11 +36,11 @@ const EditProduct = () => {
   const [tempProduct, setTempProduct] = useState(defaultProduct)
   const { data: product, isError } = useSWR(() => id && !isNew ? `/api/products/${id}` : null, { refreshInterval: 5000 })
 
-  useEffect(async () => {
+  useEffect(() => {
     if (product?._id !== tempProduct?._id) {
       setTempProduct(product)
     }
-  }, [product])
+  }, [product, tempProduct?._id])
 
   if (isError) return (
     <Alert status='error'>

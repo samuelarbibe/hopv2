@@ -13,7 +13,6 @@ import { setCustomerAddress } from '../../utils/cart'
 import { useConsts } from '../../hooks/useConsts'
 
 const useAddress = (customerAddress) => {
-  const addressWithCity = customerAddress + ' תל אביב יפו'
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [data, setData] = useState(null)
@@ -23,6 +22,7 @@ const useAddress = (customerAddress) => {
       setError(false)
       setIsLoading(true)
       try {
+        const addressWithCity = customerAddress + ' תל אביב יפו'
         const { data } = await axios.get(`/api/address/geocode/${addressWithCity}`)
         setData(data)
       } catch (error) {
@@ -60,7 +60,7 @@ const AddressInput = ({ defaultValue, onChange }) => {
 
   useEffect(() => {
     onChange(isValid && fullAddress)
-  }, [isValid, parsedAddress])
+  }, [fullAddress, isValid, onChange, parsedAddress])
 
   const renderLeftChildren = () => {
     let children = null
@@ -113,7 +113,7 @@ const HouseNumberInput = ({ defaultValue, onChange }) => {
 
   useEffect(() => {
     onChange(isValid && customerHouseNumber)
-  }, [isValid, customerHouseNumber])
+  }, [isValid, customerHouseNumber, onChange])
 
   const renderLeftChildren = () => {
     let children = null
@@ -162,7 +162,7 @@ const Address = ({ customerDetails, setIsValid }) => {
     } else {
       setIsValid(isValid)
     }
-  }, [isValid])
+  }, [address, hasChanged, houseNumber, isValid, setIsValid])
 
   const onChangeIsPrivateHouse = ({ target }) => {
     const { checked } = target

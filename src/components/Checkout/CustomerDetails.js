@@ -42,7 +42,7 @@ const Address = ({ customerDetails, setIsValid }) => {
     } else {
       setIsValid(isValid)
     }
-  }, [isValid, values, hasChanged])
+  }, [isValid, values, hasChanged, setIsValid])
 
   const handleChangeFullName = ({ target }) => {
     const { value } = target
