@@ -32,7 +32,7 @@ const ProductPage = () => {
     revalidateOnMount: true,
     refreshInterval: 5000,
   })
-  const { data: cart, isErrorCart } = useSWR('/api/cart')
+  const { data: cart, isErrorCart } = useSWR('/api/cart', { refreshInterval: 5000 })
 
   const open = !!product
   const trail = useTrail(3, {

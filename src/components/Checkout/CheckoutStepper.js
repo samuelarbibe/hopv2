@@ -43,12 +43,12 @@ const CheckoutStepper = () => {
       {
         name: 'פרטים עליכם',
         component: <CustomerDetails customerDetails={cart?.customerDetails} setIsValid={setIsCurrentStageValid} />,
-        allowed: () => cart.shippingMethod
+        allowed: () => isSelectedShippingDelivery ? isCurrentStageValid : cart?.shippingMethod
       },
       {
         name: 'תשלום',
         component: <Payment />,
-        allowed: () => isCurrentStageValid && (!isSelectedShippingDelivery || cart?.shippingMethod)
+        allowed: () => isCurrentStageValid
       },
     ]
   }, [cart, shippingMethods, products, isSelectedShippingDelivery, isCurrentStageValid])

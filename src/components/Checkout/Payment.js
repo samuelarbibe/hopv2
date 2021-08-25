@@ -1,5 +1,4 @@
-/* eslint-disable no-constant-condition */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import useSWR from 'swr'
 
 import Iframe from 'react-iframe'
@@ -11,8 +10,9 @@ import { cancelOrder } from '../../utils/orders'
 const Payment = () => {
   const { data: paymentProcess, isLoading, isError } = useSWR('/api/orders/createOrder', { revalidateOnFocus: false })
 
-  const [pageLoadingError, setPageLoadingError] = useState(false)
+  const shouldCancelOnUnmount = useRef()
   const [paymentStatus, setPaymentStatus] = useState()
+  const [pageLoadingError, setPageLoadingError] = useState(false)
 
   const handleMessage = async (result) => {
     if (result.origin === 'https://meshulam.co.il' || result.origin === 'https://sandbox.meshulam.co.il') {
@@ -39,11 +39,15 @@ const Payment = () => {
   }
 
   useEffect(() => {
+    shouldCancelOnUnmount.current = !pageLoadingError && !isError && paymentStatus !== 'success'
+  }, [isError, pageLoadingError, paymentStatus])
+
+  useEffect(() => {
     window.addEventListener('message', handleMessage)
 
     return () => {
       window.removeEventListener('message', handleMessage)
-      if (!pageLoadingError && !isError && paymentStatus !== 'success') cancelOrder()
+      shouldCancelOnUnmount.current && cancelOrder()
     }
   }, [])
 
