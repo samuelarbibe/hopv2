@@ -1,6 +1,7 @@
 import path from 'path'
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
+import moment from 'moment'
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom'
 
 import {
@@ -14,7 +15,6 @@ import {
 } from '@chakra-ui/react'
 
 import { addShippingMethod, deleteShippingMethod, updateShippingMethod } from '../../../utils/shippingMethod'
-import DatePicker from '../../../libs/datepicker/DatePicker'
 import DeleteButton from './DeleteButton'
 import ShippingMap from './ShippingMap'
 
@@ -117,22 +117,22 @@ const EditShippingMethod = () => {
     }))
   }
 
-  const handleDateChange = (value) => {
-    const newDate = value.getDate()
+  const handleChangeDate = ({ target }) => {
+    const newDate = moment(target.value)
 
     setTempShippingMethod((prev) => ({
       ...prev,
-      from: new Date(prev.from).setDate(newDate),
-      to: new Date(prev.to).setDate(newDate),
+      from: moment(prev.from).set({ year: newDate.get('year'), month: newDate.get('month'), date: newDate.get('date') }).toDate(),
+      to: moment(prev.to).set({ year: newDate.get('year'), month: newDate.get('month'), date: newDate.get('date') }).toDate()
     }))
   }
 
-  const handleTimeChange = (value, key) => {
-    const newTime = value.getTime()
+  const handleChangeTime = (key) => ({ target }) => {
+    const newTime = moment(target.value, 'HH:mm')
 
     setTempShippingMethod((prev) => ({
       ...prev,
-      [key]: new Date(prev[key]).setTime(newTime),
+      [key]: moment(prev[key]).set({ hours: newTime.get('hours'), minutes: newTime.get('minutes') }),
     }))
   }
 
@@ -234,32 +234,28 @@ const EditShippingMethod = () => {
         <VStack flex='1'>
           <FormControl id="date">
             <FormLabel htmlFor='date'>ביום</FormLabel>
-            <DatePicker selected={new Date(tempShippingMethod.from)} onChange={handleDateChange} dateFormat="dd/MM/yyyy" />
+            <Input
+              type='date'
+              value={moment(tempShippingMethod.from).format('YYYY-MM-DD')}
+              onChange={handleChangeDate}
+            />
           </FormControl>
           <HStack w='100%' spacing='5'>
             <FormControl id="from">
               <FormLabel htmlFor='from'>משעה</FormLabel>
-              <DatePicker
-                showTimeSelect
-                showTimeSelectOnly
-                timeIntervals={15}
-                selected={new Date(tempShippingMethod.from)}
-                onChange={(value) => handleTimeChange(value, 'from')}
-                dateFormat='HH:mm'
-                timeFormat='HH:mm'
+              <Input
+                type='time'
+                value={moment(tempShippingMethod.from).format('HH:mm')}
+                onChange={handleChangeTime('from')}
               />
             </FormControl>
             <FormControl id="to">
               <FormLabel htmlFor='to'>לשעה</FormLabel>
-              <DatePicker
-                showTimeSelect
-                showTimeSelectOnly
-                timeIntervals={15}
-                filterTime={(time) => time > new Date(tempShippingMethod.from).getTime()}
-                selected={new Date(tempShippingMethod.to)}
-                onChange={(value) => handleTimeChange(value, 'to')}
-                dateFormat='HH:mm'
-                timeFormat='HH:mm'
+              <Input
+                type='time'
+                min={moment(tempShippingMethod.from).format('HH:mm')}
+                value={moment(tempShippingMethod.to).format('HH:mm')}
+                onChange={handleChangeTime('to')}
               />
             </FormControl>
           </HStack>
