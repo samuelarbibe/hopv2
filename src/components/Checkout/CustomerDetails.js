@@ -95,7 +95,7 @@ const Address = ({ customerDetails, setIsValid }) => {
           </FormControl>
           <FormControl isInvalid={!!errors.phoneNumber}>
             <FormLabel>מספר טלפון</FormLabel>
-            <Input type='number' value={values.phoneNumber} onChange={handleChangePhoneNumber} placeholder='הכנס מספר טלפון' />
+            <Input inputmode="numeric" pattern="[0-9]*" type="text" value={values.phoneNumber} onChange={handleChangePhoneNumber} placeholder='הכנס מספר טלפון' />
             <FormErrorMessage>{errors.phoneNumber}</FormErrorMessage>
           </FormControl>
         </Box>
