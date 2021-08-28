@@ -12,10 +12,12 @@ import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
 import { setCustomerAddress } from '../../utils/cart'
 import { useConsts } from '../../hooks/useConsts'
 
-const useAddress = (customerAddress) => {
+const useAddress = (value) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [data, setData] = useState(null)
+
+  const customerAddress = value.replace(/\s+/g, ' ').trim()
 
   useEffect(() => {
     const fetchAddress = async () => {
@@ -42,16 +44,11 @@ const useAddress = (customerAddress) => {
 }
 
 const AddressInput = ({ defaultValue, onChange }) => {
-  const [customerAddress, setCustomerAddress] = useState(defaultValue)
   const [touched, setTouched] = useState(false)
+  const [customerAddress, setCustomerAddress] = useState(defaultValue)
   const [debouncedCustomerAddress] = useDebounce(customerAddress, 1000)
-  const { data: parsedAddress, error: addressError, isLoading: isAddressLoading } = useAddress(debouncedCustomerAddress.replace(/\s+/g, ' ').trim())
 
-  const handleChange = ({ target }) => {
-    const { value } = target
-    setTouched(true)
-    setCustomerAddress(value)
-  }
+  const { data: parsedAddress, error: addressError, isLoading: isAddressLoading } = useAddress(debouncedCustomerAddress)
 
   const isLoading = debouncedCustomerAddress !== customerAddress || isAddressLoading
   const isError = addressError && touched
@@ -61,6 +58,12 @@ const AddressInput = ({ defaultValue, onChange }) => {
   useEffect(() => {
     onChange(isValid && fullAddress)
   }, [fullAddress, isValid, onChange, parsedAddress])
+
+  const handleChange = ({ target }) => {
+    const { value } = target
+    setTouched(true)
+    setCustomerAddress(value)
+  }
 
   const renderLeftChildren = () => {
     let children = null

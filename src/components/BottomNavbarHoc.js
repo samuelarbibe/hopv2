@@ -1,6 +1,7 @@
-import { Box, Center, Container } from '@chakra-ui/layout'
-import { Fade } from '@chakra-ui/react'
 import React, { useRef } from 'react'
+
+import { Fade, Box, Center, Container } from '@chakra-ui/react'
+
 import useOnScreen from '../hooks/useOnScreen'
 
 const BottomNavbarHoc = ({ children }) => {

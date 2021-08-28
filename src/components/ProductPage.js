@@ -3,19 +3,19 @@ import useSWR from 'swr'
 import { useParams } from 'react-router'
 import { useTrail, animated } from 'react-spring'
 
-import { updateCart } from '../utils/cart'
-
 import {
   Spinner, Alert, HStack, Tag,
   AlertIcon, AlertTitle, Button, ButtonGroup, IconButton,
   Center, Flex, Heading, Text, VStack, Stack, Box, Spacer, useToast
 } from '@chakra-ui/react'
 import { MinusIcon, AddIcon } from '@chakra-ui/icons'
+
+import { updateCart } from '../utils/cart'
+import { useCart } from '../hooks/useCart'
 import { useConsts } from '../hooks/useConsts'
 
 import ProductImages from './ProductImages'
 import BottomNavbarHoc from './BottomNavbarHoc'
-import { useCart } from '../hooks/useCart'
 
 const ProductPage = () => {
   const toast = useToast()
@@ -23,16 +23,11 @@ const ProductPage = () => {
   const { consts } = useConsts()
   const { onOpen: openCart } = useCart()
 
-  const { data: loadedProducts } = useSWR('/api/products', {
-    revalidateOnMount: false,
-    revalidateOnFocus: false,
-  })
-  const { data: product, isErrorProduct } = useSWR(`/api/products/${id}`, {
-    initialData: loadedProducts?.find((product) => product._id === id),
-    revalidateOnMount: true,
-    refreshInterval: 5000,
-  })
+  const [tempAmount, setTempAmount] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+
   const { data: cart, isErrorCart } = useSWR('/api/cart', { refreshInterval: 5000 })
+  const { data: product, isErrorProduct } = useSWR(`/api/products/${id}`, { refreshInterval: 5000 })
 
   const open = !!product
   const trail = useTrail(3, {
@@ -42,9 +37,7 @@ const ProductPage = () => {
     from: { opacity: 0, x: 20 },
   })
 
-  const amountInCart = cart?.items.find((item) => item.productId === id)?.amount || 0
-  const [tempAmount, setTempAmount] = useState(amountInCart || 1)
-  const [isLoading, setIsLoading] = useState(false)
+  const amountInCart = useMemo(() => cart?.items.find((item) => item.productId === id)?.amount || 0, [cart, id])
   const amountDiff = useMemo(() => tempAmount - amountInCart, [tempAmount, amountInCart])
 
   useEffect(() => {
@@ -67,16 +60,15 @@ const ProductPage = () => {
   const handleClickAmount = (actionType) => async () => {
     switch (actionType) {
       case 'add':
-        setTempAmount((prev) => prev + 1)
-        break
+        return setTempAmount((prev) => prev + 1)
       case 'sub':
-        setTempAmount((prev) => prev - 1)
-        break
-    }1
+        return setTempAmount((prev) => prev - 1)
+    }
   }
 
   const handleClickSave = async () => {
     setIsLoading(true)
+
     const success = await updateCart(id, amountDiff)
     if (success) {
       openCart()
@@ -89,6 +81,7 @@ const ProductPage = () => {
         isClosable: true,
       })
     }
+
     setIsLoading(false)
   }
 

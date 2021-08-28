@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react'
 
 import {
-  VStack, Heading, FormControl, FormLabel, Input,
-  Stack,
+  VStack, Heading, FormControl, FormLabel, Input, Stack,
   Box, Alert, AlertIcon, AlertTitle, Fade, FormErrorMessage
 } from '@chakra-ui/react'
+
 import { setCustomerDetails } from '../../utils/cart'
 
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 const FULLNAME_REGEX = /^[a-z\u0590-\u05fe\s]+$/i
 const NUMBER_REGEX = /^[0-9]*$/
 const PHONE_REGEX = /^\d{10}$/
-
 
 const Address = ({ customerDetails, setIsValid }) => {
   const [values, setValues] = useState({

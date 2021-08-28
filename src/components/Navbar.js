@@ -35,7 +35,7 @@ const Navbar = () => {
           {
             adminMode
               ? (
-                <Menu placement='bottom-end' >
+                <Menu placement='bottom-end'>
                   {({ isOpen }) => (
                     <>
                       <MenuButton isActive={isOpen} as={IconButton} icon={isOpen ? <CloseIcon width='10px' /> : <HamburgerIcon />} variant='ghost'>
