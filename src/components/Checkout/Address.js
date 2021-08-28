@@ -132,7 +132,7 @@ const HouseNumberInput = ({ defaultValue, onChange }) => {
     <FormControl id="houseNumber" isInvalid={isError}>
       <FormLabel>מספר דירה</FormLabel>
       <InputGroup>
-        <Input pr='16px' placeholder='לדוגמה: 7' type="number" value={customerHouseNumber} onChange={handleChange} />
+        <Input inputmode="numeric" pattern="[0-9]*" type="text" pr='16px' placeholder='לדוגמה: 7' value={customerHouseNumber} onChange={handleChange} />
         {
           renderLeftChildren()
         }
