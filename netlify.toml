@@ -1,6 +1,6 @@
 [[redirects]]
   from = "/api/*"
-  to = "https://hop-tlv-server.herokuapp.com/api/:splat"
+  to = "https://hop-tlv-server-np.herokuapp.com/api/:splat"
   status = 200
   force = true
 
