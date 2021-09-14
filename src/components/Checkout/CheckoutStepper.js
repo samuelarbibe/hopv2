@@ -21,7 +21,7 @@ const CheckoutStepper = () => {
 
   const { data: cartTimer, isError: isCartTimerError } = useCartTimer()
 
-  const { data: cart, isError: isCartError } = useSWR('/api/cart', { refreshInterval: 5000 })
+  const { data: cart, isError: isCartError } = useSWR('/api/cart')
   const { data: products, isError: isProductsError } = useSWR('/api/products', { refreshInterval: 5000 })
   const { data: shippingMethods, isError: isShippingMethodsError } = useSWR('/api/shippingMethods', { refreshInterval: 5000 })
 

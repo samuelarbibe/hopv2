@@ -26,7 +26,7 @@ const ProductPage = () => {
   const [tempAmount, setTempAmount] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
 
-  const { data: cart, isErrorCart } = useSWR('/api/cart', { refreshInterval: 5000 })
+  const { data: cart, isErrorCart } = useSWR('/api/cart')
   const { data: product, isErrorProduct } = useSWR(`/api/products/${id}`, { refreshInterval: 5000 })
 
   const open = !!product

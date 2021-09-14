@@ -1,4 +1,5 @@
 import React from 'react'
+import useSWR from 'swr'
 import { DndProvider } from 'react-dnd'
 import { isMobile } from 'react-device-detect'
 import { Route, Switch } from 'react-router-dom'
@@ -23,6 +24,8 @@ import PrivateRoute from './components/Admin/PrivateRoute'
 import CheckoutStepper from './components/Checkout/CheckoutStepper'
 
 function App() {
+  useSWR('/api/cart', { refreshInterval: 5000 })
+
   return (
     <ChakraProvider theme={theme}>
       <CartProvider>

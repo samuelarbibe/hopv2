@@ -19,7 +19,7 @@ const CheckoutDrawer = () => {
   const [redirect, setRedirect] = useState('')
 
   const { isOpen, onClose } = useCart()
-  const { data: cart, isError: isCartError } = useSWR('/api/cart', { refreshInterval: 5000, isPaused: () => !isOpen })
+  const { data: cart, isError: isCartError } = useSWR('/api/cart', { isPaused: () => !isOpen })
   const { data: products, isError: isProductsError } = useSWR('/api/products')
   const { data: shippingMethods, isError: isShippingMethodsError } = useSWR('/api/shippingMethods')
   const { data: cartTimer, isError: isCartTimerError } = useCartTimer()
