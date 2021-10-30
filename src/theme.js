@@ -4,7 +4,7 @@ const theme = extendTheme({
   components: {
     Text: {
       baseStyle: {
-        color: 'gray.600'
+        color: 'gray.600',
       }
     },
   },
@@ -21,12 +21,9 @@ const theme = extendTheme({
       900: '#1A202C',
     }
   },
-  styles: {
-    global: {
-      body: {
-        fontFamily: 'Rubik',
-      }
-    }
-  }
+  fonts: {
+    heading: 'Inter, Alef',
+    body: 'Raleway, Alef',
+  },
 })
 export default theme

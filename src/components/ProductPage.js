@@ -97,7 +97,7 @@ const ProductPage = () => {
               <Heading size='lg'>{product.name}</Heading>
             </animated.div>
             <animated.div style={trail[1]}>
-              <Text dir='rtl' color='gray.600'>{product.description}</Text>
+              <Text dir='rtl'>{product.description}</Text>
             </animated.div>
           </VStack>
           <Spacer py='3' />

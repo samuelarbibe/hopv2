@@ -6,12 +6,11 @@ import { Route, Switch } from 'react-router-dom'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { TouchBackend } from 'react-dnd-touch-backend'
 
-import { ChakraProvider, Container } from '@chakra-ui/react'
+import { Container } from '@chakra-ui/react'
 
 import { CartProvider } from './hooks/useCart'
 import { AuthProvider } from './hooks/useAuth'
 
-import theme from './theme'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
 import Admin from './components/Admin/Admin'
@@ -27,39 +26,37 @@ function App() {
   useSWR('/api/cart', { refreshInterval: 5000 })
 
   return (
-    <ChakraProvider theme={theme}>
-      <CartProvider>
-        <AuthProvider>
-          <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
-            <Navbar />
-            <Container maxWidth='container.lg' py='64px'>
-              <Switch>
-                <Route path='/thankYou'>
-                  <ThankYou />
-                </Route>
-                <Route path='/login'>
-                  <Login />
-                </Route>
-                <Route path='/checkout'>
-                  <CheckoutStepper />
-                </Route>
-                <PrivateRoute path='/admin'>
-                  <Admin />
-                </PrivateRoute>
-                <Route path='/product/:id'>
-                  <ProductPage />
-                </Route>
-                <Route path='/'>
-                  <Products />
-                </Route>
-              </Switch>
-            </Container>
-            <Footer />
-            <CheckoutDrawer />
-          </DndProvider>
-        </AuthProvider>
-      </CartProvider>
-    </ChakraProvider >
+    <CartProvider>
+      <AuthProvider>
+        <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
+          <Navbar />
+          <Container maxWidth='container.lg' py='64px'>
+            <Switch>
+              <Route path='/thankYou'>
+                <ThankYou />
+              </Route>
+              <Route path='/login'>
+                <Login />
+              </Route>
+              <Route path='/checkout'>
+                <CheckoutStepper />
+              </Route>
+              <PrivateRoute path='/admin'>
+                <Admin />
+              </PrivateRoute>
+              <Route path='/product/:id'>
+                <ProductPage />
+              </Route>
+              <Route path='/'>
+                <Products />
+              </Route>
+            </Switch>
+          </Container>
+          <Footer />
+          <CheckoutDrawer />
+        </DndProvider>
+      </AuthProvider>
+    </CartProvider>
   )
 }
 

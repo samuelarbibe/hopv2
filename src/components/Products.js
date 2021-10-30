@@ -42,7 +42,7 @@ const Products = () => {
           .map((product, index) => {
             return (
               <animated.div key={index} style={trail[index]}>
-                <Box onClick={() => history.push(`/product/${product._id}`)} >
+                <Box onClick={() => history.push(`/product/${product._id}`)} sx={{ transition: '0.3s' }} _hover={{ opacity: 0.7 }}>
                   <Box height='400px'>
                     <Image alt={product.name} height='100%' width='100%' src={product.images[0]} fit='cover' />
                   </Box>
